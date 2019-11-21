@@ -1,5 +1,6 @@
-from flask import render_template, redirect, url_for
-from application import app
+from flask import redirect, render_template, url_for
+
+from application.app import app
 
 
 @app.route("/")
