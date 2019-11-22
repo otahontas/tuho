@@ -7,6 +7,9 @@
    * Run the application `python3 run.py`
    * Use a web browser to navigate to `localhost:5000`
 
+## Demo
+- App [runs on heroku](https://tuho-lukuvinkkikirjasto.herokuapp.com/) (you may have to wait for a short while before app starts)
+
 ## Code style
 
 Code style should follow style guides described in [pep8](https://www.python.org/dev/peps/pep-0008/). Linting can be done with flake8 (installed to venv) and imports can be sorted with isort.
@@ -25,3 +28,9 @@ Code style should follow style guides described in [pep8](https://www.python.org
 
 ## Testing
 - Repo includes ready-to-use database for testing. Keep your modified test database version in .gitignore, don't override master in repo.
+- **Travis link should be added here**
+
+## Product and sprint backlogs
+- Markdown-styled product backlog [can be found here](https://github.com/otahontas/tuho/blob/master/documentation/productbacklog.md)
+- Sprint backlogs can be found behind [Projects-tab](https://github.com/otahontas/tuho/projects)
+- **Sprint working hours and burndown should be added here**
