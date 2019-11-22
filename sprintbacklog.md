@@ -1,3 +1,0 @@
-- as a user, I want to add new books
-- as a user, I list my books
-- as a user, I want to delete books
