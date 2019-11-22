@@ -33,4 +33,4 @@ Code style should follow style guides described in [pep8](https://www.python.org
 ## Product and sprint backlogs
 - Markdown-styled product backlog [can be found here](https://github.com/otahontas/tuho/blob/master/documentation/productbacklog.md)
 - Sprint backlogs can be found behind [Projects-tab](https://github.com/otahontas/tuho/projects)
-- **Sprint working hours and burndown should be added here**
+- Sprint working hours and burndown chart in [Google Drive](https://docs.google.com/spreadsheets/d/1mZTxDfF5NAi7l06G1bbRIsrdH6kzyGXTUGnV5ptv-mw/edit?usp=sharing)
