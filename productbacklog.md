@@ -1,6 +1,8 @@
+# Sprint 1:
 - as a user, I want to add new books
 - as a user, I list my books
 - as a user, I want to modify books
+# Rest:
 - as a user, I want to delete books
 - as a user, I want to add new podcasts
 - as a user, I want to add new links
@@ -21,3 +23,7 @@
 - as a user, I want add my bookmarks as read / unread
 - as a user, I want to have bookmarks added automatically based on given URL or ISBN
 - as a user, I want to have web interface for my bookmarks
+- as a developer, I want to have my app continously delivered
+    - github should have stable and nightly branches
+    - travis shuldd run test after deploying to stable
+    - travis should deploy to heroku after succesful test run
