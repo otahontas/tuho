@@ -14,10 +14,16 @@ class Base(db.Model):
 class Bookmark(Base):
     __tablename__ = 'bookmark'
 
+    TYPE_BOOK = 1
+    TYPE_BLOG = 2
+    TYPE_PODCAST = 3
+    TYPE_VIDEO = 4
+
     read_status = db.Column(db.Boolean, default=False)
     read_date = db.Column(db.DateTime)
     header = db.Column(db.String(50))
     comment = db.Column(db.String(1024))
+    type = db.Column(db.Integer)
 
     __mapper_args__ = {
         'polymorphic_identity': 'bookmark'
