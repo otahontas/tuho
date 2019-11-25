@@ -14,10 +14,3 @@ else:
     app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
 db = SQLAlchemy(app)
-
-
-# create tables if they don't exist
-try:
-    db.create_all()
-except:
-    pass
