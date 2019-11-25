@@ -36,3 +36,13 @@ def get_bookmark(bookmark_id):
 
     # TODO: Create bookmark.html template
     return render_template("bookmark.html", bookmark=bookmark)
+
+
+@app.route("/bookmarks/new")
+def bookmarks_form():
+    return render_template("bookmarks/new.html")
+
+@app.route("/bookmarks", methods=["POST"])
+def bookmarks_create():
+    print(request.form.get("header"))
+    return "hello"

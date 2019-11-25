@@ -1,0 +1,11 @@
+{% extends "layout.html"  %}
+
+{% block body %}
+<form method="POST" action="{{ url_for('bookmarks_create') }}">
+  <input type="text" name="header"/>
+  <input type="text" name="comment"/>
+
+  <input type="submit" value="Add a new bookmark"/>
+</form>
+{% endblock %}
+
