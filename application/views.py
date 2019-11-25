@@ -1,7 +1,7 @@
 from flask import render_template, request, url_for
 
 from application.app import app
-from application.models import Book, Bookmark
+from application.models import Bookmark
 
 
 @app.route("/")
@@ -12,7 +12,7 @@ def index():
 @app.route("/list", methods=["GET"])
 def bookmarks_list():
     page = request.args.get('page', 1, type=int)
-    bookmarks = Book.query.order_by(Book.header).paginate(page, 5, False)
+    bookmarks = Bookmark.query.order_by(Bookmark.header).paginate(page, 5, False)
     next_url = url_for('bookmarks_list', page=bookmarks.next_num) \
         if bookmarks.has_next else None
     prev_url = url_for('bookmarks_list', page=bookmarks.prev_num) \
