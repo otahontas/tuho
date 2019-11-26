@@ -1,7 +1,7 @@
 from flask import render_template, request, url_for
 
-from application.app import app
-from application.models import Bookmark
+from application.app import app, db
+from application.models import Bookmark, Book
 
 
 @app.route("/")
@@ -44,5 +44,14 @@ def bookmarks_form():
 
 @app.route("/bookmarks", methods=["POST"])
 def bookmarks_create():
-    print(request.form.get("header"))
-    return "hello"
+    header = request.form.get("header")
+    comment = request.form.get("comment")
+    writer = request.form.get("writer")
+    ISBN = request.form.get("ISBN")
+
+    book = Book(header=header, comment=comment, writer=writer, ISBN=ISBN)
+
+    db.session().add(book)
+    db.session().commit()
+
+    return "nice"

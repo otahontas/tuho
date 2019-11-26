@@ -29,9 +29,6 @@ class Bookmark(Base):
         'polymorphic_identity': 'bookmark'
     }
 
-    def __init__(self, header, comment):
-        self.header = header
-        self.comment = comment
 
 
 class Book(Bookmark):
