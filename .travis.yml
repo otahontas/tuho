@@ -1,20 +1,20 @@
 language: python
-
 branches:
   only:
   - master
-
 matrix:
   include:
-    - python: 3.7
-      dist: zenial
-
+  - python: 3.7
+    dist: zenial
 install:
-  - pip install -r requirements.txt
-
+- pip install -r requirements.txt
 script:
-  - flake8
-  - isort -c
-
+- flake8
+- isort -c
 after_script:
-  - codecov --token=CODECOV_TOKEN
+- codecov --token=CODECOV_TOKEN
+deploy:
+  provider: heroku
+  api_key:
+    secure: ekh3r9yYsJVqW4tU7CIVHW2o0wjdSUcKRwaGt9ypQAegG/7s86Lf04zMaPLwydG1QDR6OkPyK8Prvy3saffoYINbGDoadoB/Av3pJDyfiG14wxD+Qvm2rJe6xhtz/kPV8W67O4MndIPynCoJjRanioZc9HhDEFhrGzfxYARImywP8nWxIJEJDvYiPOMog9huHunD//kAfzrFDnihaheeQFjaywqdoMKyDP1Aob5VLD9JLI4B7MM9fdVtSFPEnNjO8oKsEm6Z0fT+V8FESGzh0gMx4bgZJQkOAsvPbKw2ZbN4Ah7XiSHtm52/f6MSLDj0ajXdtPvRKMrZqasXMjskyZiZwz848dYR4bbLmO+DjqWsEkbCaezPz+zs7QvUACPzQ1dk8YcTmt594PdQVWtm5Jg0YnoM6dT46c6ZN8zyOSoGaQOd5CpLxQBIKfgUK8Nu1+hcVJylvHGrzBT+3OrtRQxGYotevqtkuqxmj7RGIqVWUwNXs583sdDJJswCyf3NwqiS7Tg3V1XqQKGzaKFmn7kWGn84h7TlFn4yHupFeWlV1NheaNTBdx3aQ73A53blTUwDqBSgQN+cw3IKU7Y1EG47yiCAowNsOo/yLxD7KsS746RcLpDHnDWHY+GM+Hrpx1MH7z1Jcqt7ntukjnA3KQ2gELfDqc/9QLiV5zO7TkI=
+    app: tuho-lukuvinkkikirjasto
