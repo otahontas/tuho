@@ -37,6 +37,23 @@ def get_bookmark(bookmark_id):
     # TODO: Create bookmark.html template
     return render_template("bookmark.html", bookmark=bookmark)
 
+@app.route("/bookmark/delete/<bookmark_id>", methods=["GET"])
+def delete_bookmark(bookmark_id):
+    try:
+        int(bookmark_id)
+    except ValueError:
+        return redirect(url_for("bookmarks_list"))
+
+    # TODO: Handle if no bookmark found sqlalchemy.orm.exc.NoResultFound
+    bookmark = Bookmark.query.get(bookmark_id)
+
+    if bookmark is None:
+        return redirect(url_for("bookmarks_list"))
+
+    db.session.delete(bookmark)
+    db.session.commit()
+    return redirect(url_for("bookmarks_list"))
+
 
 @app.route("/bookmarks/new")
 def bookmarks_form():
