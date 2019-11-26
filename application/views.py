@@ -6,7 +6,7 @@ from application.models import Book, Bookmark
 
 @app.route("/")
 def index():
-    return render_template("index.html")
+    return redirect(url_for("bookmarks_list"))
 
 
 @app.route("/list", methods=["GET"])
@@ -48,6 +48,11 @@ def delete_bookmark(bookmark_id):
     bookmark = Bookmark.query.get(bookmark_id)
 
     if bookmark is None:
+        return redirect(url_for("bookmarks_list"))
+
+    if bookmark.type == 1:
+        Book.query.filter(Book.id == bookmark_id).delete()
+    else:
         return redirect(url_for("bookmarks_list"))
 
     db.session.delete(bookmark)
