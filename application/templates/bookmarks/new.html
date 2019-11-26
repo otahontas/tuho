@@ -2,12 +2,25 @@
 
 {% block body %}
 <form method="POST" action="{{ url_for('bookmarks_create') }}">
-  <input type="text" name="header"/>
-  <input type="text" name="comment"/>
-  <input type="text" name="writer"/>
-  <input type="text" name="ISBN"/>
-
-  <input type="submit" value="Add a new bookmark"/>
+  	<table>
+		<tr>
+			<th>Name:</th>
+			<th><input type="text" name="header"/></th>
+		</tr>
+  		<tr>	
+			<th>Writer:</th> 
+			<th><input type="text" name="writer"/></th>
+  		</tr>
+		<tr>
+			<th>ISBN:</th> 
+			<th><input type="text" name="ISBN"/></th>
+  		</tr>
+		<tr>
+			<th>Comment:</th> 
+			<th><input type="text" name="comment"/></th>
+		</tr>
+  	</table>
+  	<input type="submit" value="Add a new book"/>
 </form>
 {% endblock %}
 

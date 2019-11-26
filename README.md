@@ -1,3 +1,4 @@
+[![Build Status](https://travis-ci.com/otahontas/tuho.svg?branch=master)](https://travis-ci.com/otahontas/tuho)
 ## Local usage
 
    * Create virtual environment `python3 -m venv venv`
