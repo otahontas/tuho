@@ -30,7 +30,6 @@ class Bookmark(Base):
     }
 
 
-
 class Book(Bookmark):
     __tablename__ = 'book'
 

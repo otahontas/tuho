@@ -1,7 +1,7 @@
-from flask import render_template, request, url_for, redirect
+from flask import redirect, render_template, request, url_for
 
 from application.app import app, db
-from application.models import Bookmark, Book
+from application.models import Book, Bookmark
 
 
 @app.route("/")
@@ -41,6 +41,7 @@ def get_bookmark(bookmark_id):
 @app.route("/bookmarks/new")
 def bookmarks_form():
     return render_template("bookmarks/new.html")
+
 
 @app.route("/bookmarks", methods=["POST"])
 def bookmarks_create():
