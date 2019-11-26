@@ -51,12 +51,11 @@ def delete_bookmark(bookmark_id):
         return redirect(url_for("bookmarks_list"))
 
     if bookmark.type == 1:
-        Book.query.filter(Book.id == bookmark_id).delete()
+        Book.delete(bookmark_id)
     else:
         return redirect(url_for("bookmarks_list"))
 
-    db.session.delete(bookmark)
-    db.session.commit()
+
     return redirect(url_for("bookmarks_list"))
 
 
