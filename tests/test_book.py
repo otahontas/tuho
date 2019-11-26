@@ -6,8 +6,9 @@ from application import app
 from application.app import db
 from application.models import Book
 
-db.drop_all()
-db.create_all()
+if not os.environ.get("HEROKU"):
+  db.drop_all()
+  db.create_all()
 
 def test_book_add():
   book = Book(header='test', comment='comment', writer='writer', ISBN=123)
