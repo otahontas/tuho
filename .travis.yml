@@ -2,10 +2,10 @@ language: python
 branches:
   only:
   - master
-matrix:
+jobs:
   include:
   - python: 3.7
-    dist: zenial
+    dist: xenial
 install:
 - pip install -r requirements.txt
 script:
@@ -16,5 +16,5 @@ after_script:
 deploy:
   provider: heroku
   api_key:
-    secure: ekh3r9yYsJVqW4tU7CIVHW2o0wjdSUcKRwaGt9ypQAegG/7s86Lf04zMaPLwydG1QDR6OkPyK8Prvy3saffoYINbGDoadoB/Av3pJDyfiG14wxD+Qvm2rJe6xhtz/kPV8W67O4MndIPynCoJjRanioZc9HhDEFhrGzfxYARImywP8nWxIJEJDvYiPOMog9huHunD//kAfzrFDnihaheeQFjaywqdoMKyDP1Aob5VLD9JLI4B7MM9fdVtSFPEnNjO8oKsEm6Z0fT+V8FESGzh0gMx4bgZJQkOAsvPbKw2ZbN4Ah7XiSHtm52/f6MSLDj0ajXdtPvRKMrZqasXMjskyZiZwz848dYR4bbLmO+DjqWsEkbCaezPz+zs7QvUACPzQ1dk8YcTmt594PdQVWtm5Jg0YnoM6dT46c6ZN8zyOSoGaQOd5CpLxQBIKfgUK8Nu1+hcVJylvHGrzBT+3OrtRQxGYotevqtkuqxmj7RGIqVWUwNXs583sdDJJswCyf3NwqiS7Tg3V1XqQKGzaKFmn7kWGn84h7TlFn4yHupFeWlV1NheaNTBdx3aQ73A53blTUwDqBSgQN+cw3IKU7Y1EG47yiCAowNsOo/yLxD7KsS746RcLpDHnDWHY+GM+Hrpx1MH7z1Jcqt7ntukjnA3KQ2gELfDqc/9QLiV5zO7TkI=
+    secure: "t5wPmNtjK/wIKMvApSbvkW/1SqoHAVyHhHCdzwZFPiBob1sz52dHJR1/jttqKb0DB08BwOIXAUzBDuEPjomMH5T2qLaPm1O59aZG+2ReD1nFLKF2QxBC5N8LLJ/1E8BbEuaur838iRGBPXWJ/73MkwIySu4ibAFMKBH8Bij5MK0/0NNkghJ9WjSDGvgeAwyLTAbK1tooZpyYWMIHxf1uCluaClerXSmZo5mjwUe68VPA2BbrSx17hUNYLPxlk9PgLVlC9zKLxl+gN7nr/xqd9lBcpOScWKwAZ4nMIR+JVDFarrZCKWFLjfoJU+wHFcF9bSS2rMnrlg2pCQRxNZCibBrqCGS/0RUvYm8uUlWbUMzxgYHOMiKGK3WefBTGcXdQKPnToMOIzPuo8Q3C5RmTS89bYL/DUX4wiXFYmQ8KRQnZEkg80ER3W1toR6hj/ty+LBOKEiKKx0/gIe4mhvW5G7kN7DUpCsKxR0Lp00gRIRo+7VaTa1mU/nKqM+wO8zRjYESGh6WCHL22B+n6KpQXJt5xsjUNVqTBhPFPulnL7gURuLzyYDF1HA7OJORVj0fccU8JvtcVX1M/AIN/xpnfMIyOuF/C5U0TUjdoekG0pfdbaAsEeoYGWCH9ZSe9SQLzlTfxn+TgnvgrA3CoULYduIJ+hnoSMHvAnx1g+M9hF24="
     app: tuho-lukuvinkkikirjasto
