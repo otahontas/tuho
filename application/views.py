@@ -1,4 +1,4 @@
-from flask import render_template, request, url_for
+from flask import render_template, request, url_for, redirect
 
 from application.app import app, db
 from application.models import Bookmark, Book
@@ -54,4 +54,4 @@ def bookmarks_create():
     db.session().add(book)
     db.session().commit()
 
-    return "nice"
+    return redirect(url_for("bookmarks_list"))
