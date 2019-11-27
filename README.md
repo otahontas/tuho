@@ -27,9 +27,9 @@ Code style should follow style guides described in [pep8](https://www.python.org
 ## Git commit style
 - Git commits should use style spesified in [How to Write a Git Commit Message](https://chris.beams.io/posts/git-commit/)
 
-## Testing
+## Testing and deploying
 - Repo includes ready-to-use database for testing. Keep your modified test database version in .gitignore, don't override master in repo.
-- **Travis link should be added here**
+    - Travis runs tests based on master branch and app is automatically deployed to Heroku after succesful build. Check out [travis reports here](https://travis-ci.com/otahontas/tuho) or behing the build status badge.
 
 ## Product and sprint backlogs
 - Markdown-styled product backlog [can be found here](https://github.com/otahontas/tuho/blob/master/documentation/productbacklog.md)
