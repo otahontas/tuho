@@ -6,7 +6,7 @@ from application.models import Book, Bookmark
 
 @app.route("/")
 def index():
-    return render_template("index.html")
+    return redirect(url_for("bookmarks_list"))
 
 
 @app.route("/list", methods=["GET"])
@@ -36,6 +36,27 @@ def get_bookmark(bookmark_id):
 
     # TODO: Create bookmark.html template
     return render_template("bookmark.html", bookmark=bookmark)
+
+
+@app.route("/bookmark/delete/<bookmark_id>", methods=["GET"])
+def delete_bookmark(bookmark_id):
+    try:
+        int(bookmark_id)
+    except ValueError:
+        return redirect(url_for("bookmarks_list"))
+
+    # TODO: Handle if no bookmark found sqlalchemy.orm.exc.NoResultFound
+    bookmark = Bookmark.query.get(bookmark_id)
+
+    if bookmark is None:
+        return redirect(url_for("bookmarks_list"))
+
+    if bookmark.type == 1:
+        Book.delete(bookmark_id)
+    else:
+        return redirect(url_for("bookmarks_list"))
+
+    return redirect(url_for("bookmarks_list"))
 
 
 @app.route("/bookmarks/new")

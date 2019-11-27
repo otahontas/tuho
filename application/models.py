@@ -45,6 +45,12 @@ class Book(Bookmark):
         'polymorphic_identity': 'book',
     }
 
+    @staticmethod
+    def delete(book_id):
+        db.session.query(Book).filter(Book.id == book_id).delete()
+        db.session.query(Bookmark).filter(Bookmark.id == book_id).delete()
+        db.session.commit()
+
 
 class Blog(Bookmark):
     __tablename__ = 'blog'
