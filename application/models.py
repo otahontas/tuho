@@ -51,6 +51,7 @@ class Book(Bookmark):
         db.session.query(Bookmark).filter(Bookmark.id == book_id).delete()
         db.session.commit()
 
+
 class Blog(Bookmark):
     __tablename__ = 'blog'
 
