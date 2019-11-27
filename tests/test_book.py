@@ -1,74 +1,95 @@
 import os
+import tempfile
 
-from flask import Flask
-from flask_sqlalchemy import SQLAlchemy
-from application import app
-from application.app import db
-from application.models import Book
-from pytest_bdd import scenario, given, when, then
+import pytest
 
-if not os.environ.get("HEROKU"):
-  db.drop_all()
-  db.create_all()
+from application import app, db
+from pytest_bdd import scenarios, given, when, then
 
-def test_book_add():
-  book = Book(header='test', comment='comment', writer='writer', ISBN=123)
-  db.session().add(book)
-  db.session().commit()
-  fetched_book = Book.query.filter(Book.header == 'test').one()
-  assert(fetched_book)
 
-def test_book_removal():
-  book = Book.query.filter(Book.header == 'test').one()
-  Book.delete(book.id)
-  fetched_books = Book.query.filter(Book.header == 'test').all()
-  assert(len(fetched_books) == 0)
+@pytest.fixture
+def client():
+    db_fd, app.config['DATABASE'] = tempfile.mkstemp()
+    app.config['TESTING'] = True
+
+    with app.test_client() as client:
+        with app.app_context():
+            db.drop_all()
+            db.create_all()
+        yield client
+
+    os.close(db_fd)
+    os.unlink(app.config['DATABASE'])
+
+
+def test_empty_db(client):
+    rv = client.get('/list')
+    print(rv.data)
+    assert b'Tietokanta on tyhj' in rv.data
+
+
+def test_book_insertion(client):
+    rv = client.post('/bookmarks',
+                     data=dict(
+                         header='test',
+                         writer='writer',
+                         ISBN=123,
+                         comment='comment'
+                     ),
+                     follow_redirects=True)
+    assert b'test' in rv.data
+    assert b'Tietokanta on tyhj' not in rv.data
 
 """Define cucumber tests here with BDD stylings"""
 
-@scenario('add_book.feature', 'User added books are saved persistently')
-def adding_works():
+
+# Scenarios
+scenarios('add_book.feature')
+
+
+# Given steps
+
+@given("I haven't added any books")
+def pass_without_books():
     pass
 
-#@scenario('add_book.feature', 'User cannot add new books without specifying isbn, name and author')
-#def test_adding_without_needed_details_does_not_work():
-#    pass
-#
-#@scenario('add_book.feature', 'User cannot add a book twice with the same name')
-#def test_adding_with_same_name_does_not_work():
-#    pass
-#
-#@scenario('add_book.feature', 'User cannot add a book twice with the same isbn')
-#def test_adding_with_same_isbn_does_not_work():
-#    pass
 
 @given("I have a new book with name, writer and isbn")
 def create_book_with_needed_details():
-    return Book(header='test', comment='comment', writer='test', ISBN=123)
+    return dict(header='test',
+                writer='writer',
+                ISBN=123,
+                comment='comment')
 
-#@given("I have a new book with only comment")
-#def create_book_with_only_comment():
-#    pass
-#
-#@given("I have a book with name that is already in db")
-#def create_book_with_present_name():
-#    pass
-#
-#@given("I have a book with isbn that is already in db")
-#def create_book_with_present_isbn():
-#    pass
+# When steps
 
-@when("I try to add new book")
-def add_new_book(create_book_with_needed_details):
-    book = create_book_with_needed_details()
-    db.session().add(book)
-    db.session().commit()
+@when("I check what's in database")
+def check_db():
+    pass
+
+
+@when("I try to add new book with name, writer and isbn")
+def add_book(client): 
+    client.post('/bookmarks',
+                     data=dict(
+                         header='test',
+                         writer='writer',
+                         ISBN=123,
+                         comment='comment'
+                     ),
+                     follow_redirects=True)
+
+
+# Then steps
+
+@then("System will report that db is empty")
+def check_db_is_empty(client):
+    rv = client.get('/list')
+    assert b'Tietokanta on tyhj' in rv.data
+
 
 @then("System will add book to db")
-def check_book_is_in_db():
-    fetched_book = Book.query.filter(Book.header == 'test').one()
-    assert(fetched_book)
-
-#@then("System will not add book to db")
-#def check_book_not_in_db():
-#    pass
+def check_db_has_book(client):
+    rv = client.get('/list')
+    assert b'test' in rv.data
+    assert b'Tietokanta on tyhj' not in rv.data

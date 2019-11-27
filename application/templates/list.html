@@ -3,6 +3,7 @@
 {% block body %}
 <h3>Selaa kirjanmerkkejä</h3>
 
+{% if bookmarks.items is defined and bookmarks.items %}
 <table class="table">
     <thead>
       <tr>
@@ -14,26 +15,29 @@
       </tr>
     </thead>
     <tbody>
-      {% for bookmark in bookmarks.items %}
-      <tr>
-        <td>
-          <a href="{{url_for('get_bookmark', bookmark_id=bookmark.id)}}">{{ bookmark.header }}</a>
-        </td>
-        <td>
-            <!-- TODO: Declare types in Bookmark model -->
-            {{ bookmark.__class__.__name__ }}
-        </td>
-        <td>
-            {{ bookmark.read_status }}
-        </td>
-        <td>
-          <a href="#" class="btn btn-primary">Muokkaa</a>
-          <a href="{{url_for('delete_bookmark', bookmark_id=bookmark.id)}}" onclick="return confirm('Oletko varma?')" class="btn btn-danger">Tuhoa</a>
-        </td>
-      </tr>
-      {% endfor %}
+        {% for bookmark in bookmarks.items %}
+        <tr>
+          <td>
+            <a href="{{url_for('get_bookmark', bookmark_id=bookmark.id)}}">{{ bookmark.header }}</a>
+          </td>
+          <td>
+              <!-- TODO: Declare types in Bookmark model -->
+              {{ bookmark.__class__.__name__ }}
+          </td>
+          <td>
+              {{ bookmark.read_status }}
+          </td>
+          <td>
+            <a href="#" class="btn btn-primary">Muokkaa</a>
+            <a href="{{url_for('delete_bookmark', bookmark_id=bookmark.id)}}" onclick="return confirm('Oletko varma?')" class="btn btn-danger">Tuhoa</a>
+          </td>
+        </tr>
+        {% endfor %}
     </tbody>
   </table>
+  {% else %}
+  <p>Tietokanta on tyhjä.</p>
+  {% endif %}
 
 
 <p>

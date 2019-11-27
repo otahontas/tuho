@@ -37,6 +37,7 @@ def get_bookmark(bookmark_id):
     # TODO: Create bookmark.html template
     return render_template("bookmark.html", bookmark=bookmark)
 
+
 @app.route("/bookmark/delete/<bookmark_id>", methods=["GET"])
 def delete_bookmark(bookmark_id):
     try:
@@ -54,7 +55,6 @@ def delete_bookmark(bookmark_id):
         Book.delete(bookmark_id)
     else:
         return redirect(url_for("bookmarks_list"))
-
 
     return redirect(url_for("bookmarks_list"))
 
