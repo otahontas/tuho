@@ -12,6 +12,7 @@ def client():
     db_fd, db_path = tempfile.mkstemp()
     db_url = 'sqlite:///' + db_path
     app.config['SQLALCHEMY_DATABASE_URI'] = db_url
+    app.config["SQLALCHEMY_ECHO"] = False
     app.config['TESTING'] = True
 
     with app.test_client() as client:
