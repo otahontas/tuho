@@ -1,7 +1,15 @@
 # Sprint 1:
 - as a user, I want to add new books
+    - Confirmators:
+        - Each book can be only added once via form
+        - Book cannot be added without name, writer and isbn.
 - as a user, I list my books
+    - Confirmators:
+        - All books are listed in listing view
 - as a user, I want to modify books
+    - Confirmators:
+        - Book cannot be changed to already unique book
+        - Changes made via form are also updated in db
 # Rest:
 - as a user, I want to delete books
 - as a user, I want to add new podcasts
