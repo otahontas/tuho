@@ -24,7 +24,6 @@ def client():
 
 def test_empty_db(client):
     rv = client.get('/list')
-    print(rv.data)
     assert b'Tietokanta on tyhj' in rv.data
 
 
