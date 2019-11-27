@@ -1,10 +1,22 @@
 # Sprint 2:
-- as a user, I want to add new video based on given YouTube URL
+- as a user, I want to add new YouTube video
+    - Confirmators:
+        - Video can be added by YouTube URL
 - as a user, I want to categorises bookmarks on the list view
+    - Confirmators:
+        - List only videos or books
+        - Use buttons for selecting category
 - as a user, I want to add book by ISBN
+    - Confirmators:
+        - Book information (title, author) fetched automatically and added to database
 - as a user, I want to view single bookmark
+    - Confirmators:
+        - All bookmark information viewable
+        - Embed YouTube video on video bookmark page
 - as a user, I want to edit single bookmark
-
+    - Confirmators:
+        - All fields editable
+        - Edit updates database correctly
 
 # Sprint 1:
 - as a user, I want to add new books
