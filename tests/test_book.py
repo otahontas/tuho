@@ -9,7 +9,9 @@ from pytest_bdd import scenarios, given, when, then
 
 @pytest.fixture
 def client():
-    db_fd, app.config['DATABASE'] = tempfile.mkstemp()
+    db_fd, db_path = tempfile.mkstemp()
+    db_url = 'sqlite:///' + db_path
+    app.config['SQLALCHEMY_DATABASE_URI'] = db_url
     app.config['TESTING'] = True
 
     with app.test_client() as client:
@@ -19,7 +21,7 @@ def client():
         yield client
 
     os.close(db_fd)
-    os.unlink(app.config['DATABASE'])
+    os.unlink(db_path)
 
 
 def test_empty_db(client):
