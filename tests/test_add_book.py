@@ -1,11 +1,6 @@
 from pytest_bdd import given, scenarios, then, when
 
 
-def test_empty_db(client):
-    rv = client.get('/list')
-    assert b'Tietokanta on tyhj' in rv.data
-
-
 def test_book_insertion(client):
     rv = client.post('/bookmarks',
                      data=dict(
