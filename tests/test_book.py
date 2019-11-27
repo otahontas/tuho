@@ -1,22 +1,39 @@
 import os
-from application.app import db
-from application.models import Book
+import tempfile
 
-if not os.environ.get("HEROKU"):
-    db.drop_all()
-    db.create_all()
+import pytest
 
-
-def test_book_add():
-    book = Book(header='test', comment='comment', writer='writer', ISBN=123)
-    db.session().add(book)
-    db.session().commit()
-    fetched_book = Book.query.filter(Book.header == 'test').one()
-    assert(fetched_book)
+from application import app, db
 
 
-def test_book_removal():
-    book = Book.query.filter(Book.header == 'test').one()
-    Book.delete(book.id)
-    fetched_books = Book.query.filter(Book.header == 'test').all()
-    assert(len(fetched_books) == 0)
+@pytest.fixture
+def client():
+    db_fd, app.config['DATABASE'] = tempfile.mkstemp()
+    app.config['TESTING'] = True
+
+    with app.test_client() as client:
+        with app.app_context():
+            db.drop_all()
+            db.create_all()
+        yield client
+
+    os.close(db_fd)
+    os.unlink(app.config['DATABASE'])
+
+
+def test_empty_db(client):
+    rv = client.get('/list')
+    assert b'Tietokanta on tyhj' in rv.data
+
+
+def test_book_insertion(client):
+    rv = client.post('/bookmarks',
+                     data=dict(
+                         header='test',
+                         writer='writer',
+                         ISBN=123,
+                         comment='comment'
+                     ),
+                     follow_redirects=True)
+    assert b'test' in rv.data
+    assert b'Tietokanta on tyhj' not in rv.data
