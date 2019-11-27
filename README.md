@@ -1,3 +1,7 @@
+# Tuho - bookmark library
+Online application for storing interesting videos, books, podcasts and websites as bookmarks.
+
+
 [![Build Status](https://travis-ci.com/otahontas/tuho.svg?branch=master)](https://travis-ci.com/otahontas/tuho)
 ## Local usage
 
