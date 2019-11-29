@@ -11,9 +11,9 @@ def resolve_book_details(ISBN):
     Return dict containing author and book title based on ISBN.
 
     Args:
-        ISBN: Book ISBN-numer as string without hyphens, containin 13 numbers
+        ISBN: Book ISBN-numer as string without hyphens, containing 10 or 13 numbers
     Returns:
-        Dict containign keys author, title and ISBN or None if book not found
+        Dict containing keys: author, title and ISBN or None if book not found
     """
     if not is_valid_isbn(ISBN):
         raise ValueError(f"Inavlid ISBN {ISBN}")
@@ -33,7 +33,10 @@ def resolve_book_details(ISBN):
 
 
 def is_valid_isbn(ISBN):
-    """ Return True if given value is a valid ISBN number containing only numbers """
+    """
+    Return True if given value is a valid ISBN number, containing only numbers and has
+    length of 10 or 13 characters.
+    """
     if not isinstance(ISBN, str):
         print("not str")
         return False
