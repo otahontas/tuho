@@ -3,6 +3,8 @@ from flask import redirect, render_template, request, url_for
 from application.app import app, db
 from application.models import Book, Bookmark
 
+from .utils import is_valid_isbn, resolve_book_details
+
 
 @app.route("/")
 def index():
@@ -66,12 +68,23 @@ def bookmarks_form():
 
 @app.route("/bookmarks", methods=["POST"])
 def bookmarks_create():
-    header = request.form.get("header")
-    comment = request.form.get("comment")
-    writer = request.form.get("writer")
-    ISBN = request.form.get("ISBN")
-
-    book = Book(header=header, comment=comment, writer=writer, ISBN=ISBN)
+    # TODO: Should this be refactored to use wtforms?
+    # TODO: If no ISBN given header and writer fields should be required
+    # TODO: Prevent adding duplicate books to db
+    ISBN = request.form.get("ISBN", None)
+    comment = request.form.get("comment", None)
+    if is_valid_isbn(ISBN):
+        try:
+            book_details = resolve_book_details(ISBN)
+            book = Book(header=book_details["title"], comment=comment,
+                        writer=book_details["author"], ISBN=ISBN)
+        except (RuntimeError, KeyError):
+            # TODO Display error message, book fetch failed
+            render_template("bookmarks/new.html")
+    else:
+        header = request.form.get("header", None)
+        writer = request.form.get("writer", None)
+        book = Book(header=header, comment=comment, writer=writer, ISBN=ISBN)
 
     db.session().add(book)
     db.session().commit()
