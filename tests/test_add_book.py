@@ -1,19 +1,5 @@
 from pytest_bdd import given, scenarios, then, when
 
-
-def test_book_insertion(client):
-    rv = client.post('/bookmarks',
-                     data=dict(
-                         header='test',
-                         writer='writer',
-                         ISBN=123,
-                         comment='comment'
-                     ),
-                     follow_redirects=True)
-    assert b'test' in rv.data
-    assert b'Tietokanta on tyhj' not in rv.data
-
-
 """Define cucumber tests here with BDD stylings"""
 
 

@@ -38,7 +38,7 @@ class Book(Bookmark):
         self.type = Bookmark.TYPE_BOOK
 
     id = db.Column(db.Integer, db.ForeignKey('bookmark.id'), primary_key=True)
-    ISBN = db.Column(db.String(17))
+    ISBN = db.Column(db.String(17), unique=True)
     writer = db.Column(db.String(250))
 
     __mapper_args__ = {

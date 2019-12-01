@@ -4,6 +4,7 @@
 <form method="POST" action="{{ url_for('bookmarks_create') }}">
 	<p>If a valid ISBN is given, book details will be resolved automatically. Fields name and writer are ignored book exists with given ISBN.</p>
   	<table>
+
 		<tr>
 			<th>Name:</th>
 			<th><input type="text" name="header"/></th>
@@ -21,7 +22,13 @@
 			<th><input type="text" name="comment"/></th>
 		</tr>
   	</table>
-  	<input type="submit" value="Add a new book"/>
+		<input type="submit" value="Add a new book"/>
+		{% if ISBN_taken %}
+		<p>Book with given ISBN is already in the database</p>
+		{% endif %}
+		{% if bookFetchFailed %}
+		<p>ISBN fetch failed</p>
+		{% endif %}
 </form>
 {% endblock %}
 

@@ -2,6 +2,7 @@ from flask import redirect, render_template, request, url_for
 
 from application.app import app, db
 from application.models import Book, Bookmark
+from sqlalchemy.exc import IntegrityError
 
 from .utils import is_valid_isbn, resolve_book_details
 
@@ -70,7 +71,6 @@ def bookmarks_form():
 def bookmarks_create():
     # TODO: Should this be refactored to use wtforms?
     # TODO: If no ISBN given header and writer fields should be required
-    # TODO: Prevent adding duplicate books to db
     ISBN = request.form.get("ISBN", None)
     comment = request.form.get("comment", None)
     if is_valid_isbn(ISBN):
@@ -80,13 +80,17 @@ def bookmarks_create():
                         writer=book_details["author"], ISBN=ISBN)
         except (RuntimeError, KeyError):
             # TODO Display error message, book fetch failed
-            render_template("bookmarks/new.html")
+            render_template("bookmarks/new.html", bookFetchFailed=True)
     else:
         header = request.form.get("header", None)
         writer = request.form.get("writer", None)
         book = Book(header=header, comment=comment, writer=writer, ISBN=ISBN)
 
     db.session().add(book)
-    db.session().commit()
+    try:
+        db.session().commit()
+    except IntegrityError:
+        db.session.rollback()
+        return render_template("/bookmarks/new.html", ISBN_taken=True)
 
     return redirect(url_for("bookmarks_list"))
