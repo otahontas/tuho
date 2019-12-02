@@ -77,7 +77,7 @@ def bookmarks_create():
                         writer=book_details["author"], ISBN=form.ISBN.data)
         except (RuntimeError, KeyError):
             # TODO Display error message, book fetch failed
-            render_template("bookmarks/new.html", bookFetchFailed=True)
+            render_template("bookmarks/new.html", form=form, bookFetchFailed=True)
     else:
         book = Book(header=form.header.data, comment=form.comment.data,
                     writer=form.writer.data, ISBN=form.ISBN.data)
