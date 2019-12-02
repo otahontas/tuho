@@ -15,7 +15,6 @@ class BookmarkFactory(factory.alchemy.SQLAlchemyModelFactory):
 
 
 class BookFactory(BookmarkFactory):
-    bookmark = factory.SubFactory(BookmarkFactory)
     ISBN = factory.Faker('isbn13', separator="")
     writer = factory.Faker('name')
 
@@ -25,7 +24,6 @@ class BookFactory(BookmarkFactory):
 
 
 class VideoFactory(BookFactory):
-    bookmark = factory.SubFactory(BookmarkFactory)
     URL = "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
 
     class Meta:
