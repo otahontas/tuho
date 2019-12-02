@@ -24,9 +24,11 @@ class Bookmark(Base):
     header = db.Column(db.String(50))
     comment = db.Column(db.String(1024))
     type = db.Column(db.Integer)
+    polymorphic_type = db.Column(db.String(50))
 
     __mapper_args__ = {
-        'polymorphic_identity': 'bookmark'
+        'polymorphic_identity': 'bookmark',
+        "polymorphic_on": polymorphic_type,
     }
 
 
@@ -37,21 +39,16 @@ class Book(Bookmark):
         super(Book, self).__init__(**kwargs)
         self.type = Bookmark.TYPE_BOOK
 
-    bookmark_id = db.Column(db.Integer, db.ForeignKey('bookmark.id'), primary_key=True)
+    bookmark_id = db.Column(db.Integer, db.ForeignKey('bookmark.id', ondelete='CASCADE'),
+                            primary_key=True)
     ISBN = db.Column(db.String(17), unique=True)
     writer = db.Column(db.String(250))
-    bookmark = db.relationship('Bookmark', backref=db.backref('books', lazy='dynamic',
-                               cascade="all,delete"), cascade="all,delete")
+    bookmark = db.relationship('Bookmark', foreign_keys="Book.bookmark_id",
+                               backref=db.backref('books', lazy='dynamic'))
 
     __mapper_args__ = {
         'polymorphic_identity': 'book',
     }
-
-    @staticmethod
-    def delete(book_id):
-        db.session.query(Book).filter(Book.id == book_id).delete()
-        db.session.query(Bookmark).filter(Bookmark.id == book_id).delete()
-        db.session.commit()
 
 
 class Blog(Bookmark):
@@ -94,10 +91,11 @@ class Video(Bookmark):
         super(Video, self).__init__(**kwargs)
         self.type = Bookmark.TYPE_VIDEO
 
-    bookmark_id = db.Column(db.Integer, db.ForeignKey('bookmark.id'), primary_key=True)
+    bookmark_id = db.Column(db.Integer, db.ForeignKey('bookmark.id', ondelete='CASCADE'),
+                            primary_key=True)
     URL = db.Column(db.String(250))
-    bookmark = db.relationship('Bookmark', backref=db.backref('videos', lazy='dynamic',
-                               cascade="all,delete"), cascade="all,delete")
+    bookmark = db.relationship('Bookmark', foreign_keys="Video.bookmark_id",
+                               backref=db.backref('video', lazy='dynamic'))
 
     __mapper_args__ = {
         'polymorphic_identity': 'video',
