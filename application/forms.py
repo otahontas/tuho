@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField
+from wtforms import StringField, BooleanField
 
 
 class BookmarkForm(FlaskForm):
@@ -13,3 +13,7 @@ class BookmarkForm(FlaskForm):
 class BookForm(BookmarkForm):
     writer = StringField("Writer")
     ISBN = StringField("ISBN")
+
+
+class BookUpdateForm(BookForm):
+    read_status = BooleanField("Read")

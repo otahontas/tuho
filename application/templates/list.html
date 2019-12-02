@@ -28,7 +28,7 @@
               {{ bookmark.read_status }}
           </td>
           <td>
-            <a href="#" class="btn btn-primary">Muokkaa</a>
+            <a href="{{url_for('bookmarks_update', bookmark_id=bookmark.id)}}" class="btn btn-primary">Muokkaa</a>
             <a href="{{url_for('delete_bookmark', bookmark_id=bookmark.id)}}" onclick="return confirm('Oletko varma?')" class="btn btn-danger">Tuhoa</a>
           </td>
         </tr>

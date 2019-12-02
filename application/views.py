@@ -3,7 +3,7 @@ from sqlalchemy.exc import IntegrityError
 
 from application.app import app, db
 from application.models import Book, Bookmark
-from application.forms import BookForm
+from application.forms import BookForm, BookUpdateForm
 
 from .utils import is_valid_isbn, resolve_book_details
 
@@ -90,3 +90,71 @@ def bookmarks_create():
         return render_template("/bookmarks/new.html", form=form, ISBN_taken=True)
 
     return redirect(url_for("bookmarks_list"))
+
+
+@app.route("/bookmarks/edit/<bookmark_id>", methods=["GET"])
+def bookmarks_edit(bookmark_id):
+    try:
+        int(bookmark_id)
+        assert Bookmark.query.get(bookmark_id)
+    except (ValueError, AssertionError):
+        abort(404)
+
+    bookmark = db.session.query(Bookmark).get(bookmark_id)
+    if not bookmark:
+        abort(404)
+
+    if bookmark.type == Bookmark.TYPE_BOOK:
+        form = BookUpdateForm()
+        form.header.data = bookmark.header
+        form.comment.data = bookmark.comment
+        form.writer.data = bookmark.writer
+        form.ISBN.data = bookmark.ISBN
+        form.read_status.data = bookmark.read_status
+        return render_template("bookmarks/update.html", form=form,
+                               bookmark_id=bookmark_id)
+
+    abort(404)
+
+
+@app.route("/bookmarks/edit/<bookmark_id>", methods=["POST"])
+def bookmarks_update(bookmark_id):
+    try:
+        int(bookmark_id)
+        assert Bookmark.query.get(bookmark_id)
+    except (ValueError, AssertionError):
+        abort(404)
+
+    bookmark = db.session.query(Bookmark).get(bookmark_id)
+    if not bookmark:
+        abort(404)
+
+    form = BookUpdateForm(request.form)
+
+    if is_valid_isbn(form.ISBN.data):
+        try:
+            book_details = resolve_book_details(form.ISBN.data)
+            bookmark.header = book_details["title"]
+            bookmark.writer = book_details["author"]
+            bookmark.comment = form.writer.data
+            bookmark.ISBN = form.ISBN.data
+            bookmark.read_status = form.read_status.data
+        except (RuntimeError, KeyError):
+            # TODO Display error message, book fetch failed
+            return render_template("bookmarks/update.html", form=form,
+                                   bookmark_id=bookmark_id, bookFetchFailed=True)
+    else:
+        bookmark.header = form.header.data
+        bookmark.writer = form.writer.data
+        bookmark.comment = form.comment.data
+        bookmark.ISBN = form.ISBN.data
+        bookmark.read_status = form.read_status.data
+
+    try:
+        db.session().commit()
+    except IntegrityError:
+        db.session.rollback()
+        return render_template("bookmarks/update.html", form=form,
+                               bookmark_id=bookmark_id, ISBN_taken=True)
+
+    return redirect(url_for("get_bookmark", bookmark_id=bookmark_id))
