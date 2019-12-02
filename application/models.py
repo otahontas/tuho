@@ -37,9 +37,11 @@ class Book(Bookmark):
         super(Book, self).__init__(**kwargs)
         self.type = Bookmark.TYPE_BOOK
 
-    id = db.Column(db.Integer, db.ForeignKey('bookmark.id'), primary_key=True)
+    bookmark_id = db.Column(db.Integer, db.ForeignKey('bookmark.id'), primary_key=True)
     ISBN = db.Column(db.String(17), unique=True)
     writer = db.Column(db.String(250))
+    bookmark = db.relationship('Bookmark', backref=db.backref('books', lazy='dynamic',
+                               cascade="all,delete"), cascade="all,delete")
 
     __mapper_args__ = {
         'polymorphic_identity': 'book',
@@ -92,8 +94,10 @@ class Video(Bookmark):
         super(Video, self).__init__(**kwargs)
         self.type = Bookmark.TYPE_VIDEO
 
-    id = db.Column(db.Integer, db.ForeignKey('bookmark.id'), primary_key=True)
+    bookmark_id = db.Column(db.Integer, db.ForeignKey('bookmark.id'), primary_key=True)
     URL = db.Column(db.String(250))
+    bookmark = db.relationship('Bookmark', backref=db.backref('videos', lazy='dynamic',
+                               cascade="all,delete"), cascade="all,delete")
 
     __mapper_args__ = {
         'polymorphic_identity': 'video',
