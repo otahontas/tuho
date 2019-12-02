@@ -1,8 +1,8 @@
-from flask import redirect, render_template, request, url_for
+from flask import abort, redirect, render_template, request, url_for
+from sqlalchemy.exc import IntegrityError
 
 from application.app import app, db
 from application.models import Book, Bookmark
-from sqlalchemy.exc import IntegrityError
 
 from .utils import is_valid_isbn, resolve_book_details
 
@@ -45,19 +45,12 @@ def get_bookmark(bookmark_id):
 def delete_bookmark(bookmark_id):
     try:
         int(bookmark_id)
-    except ValueError:
-        return redirect(url_for("bookmarks_list"))
+        assert Bookmark.query.get(bookmark_id)
+    except (ValueError, AssertionError):
+        abort(404)
 
-    # TODO: Handle if no bookmark found sqlalchemy.orm.exc.NoResultFound
-    bookmark = Bookmark.query.get(bookmark_id)
-
-    if bookmark is None:
-        return redirect(url_for("bookmarks_list"))
-
-    if bookmark.type == 1:
-        Book.delete(bookmark_id)
-    else:
-        return redirect(url_for("bookmarks_list"))
+    db.session.query(Bookmark).filter(Bookmark.id == bookmark_id).delete()
+    db.session.commit()
 
     return redirect(url_for("bookmarks_list"))
 
