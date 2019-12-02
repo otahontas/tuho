@@ -4,7 +4,14 @@ import tempfile
 import pytest
 
 from application import app, db
-from application.models import Book
+from application.factories import BookFactory, BookmarkFactory, VideoFactory
+
+
+def bind_factories(session):
+    # Hack(ish) solution to bind factories to db session
+    BookmarkFactory._meta.sqlalchemy_session = session
+    BookFactory._meta.sqlalchemy_session = session
+    VideoFactory._meta.sqlalchemy_session = session
 
 
 @pytest.fixture
@@ -19,6 +26,7 @@ def client():
         with app.app_context():
             db.drop_all()
             db.create_all()
+            bind_factories(db.session)
         yield client
 
     os.close(db_fd)
@@ -27,8 +35,9 @@ def client():
 
 @pytest.fixture
 def book():
-    b = Book(header="Test book", writer="Best writer", comment="This is a comment",
-             ISBN=1234)
-    db.session.add(b)
-    db.session.commit()
-    return b
+    return BookFactory()
+
+
+@pytest.fixture
+def video():
+    return VideoFactory()
