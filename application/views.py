@@ -3,6 +3,7 @@ from sqlalchemy.exc import IntegrityError
 
 from application.app import app, db
 from application.models import Book, Bookmark
+from application.forms import BookForm
 
 from .utils import is_valid_isbn, resolve_book_details
 
@@ -60,33 +61,32 @@ def delete_bookmark(bookmark_id):
 
 @app.route("/bookmarks/new")
 def bookmarks_form():
-    return render_template("bookmarks/new.html")
+    form = BookForm()
+    return render_template("bookmarks/new.html", form=form)
 
 
 @app.route("/bookmarks", methods=["POST"])
 def bookmarks_create():
-    # TODO: Should this be refactored to use wtforms?
     # TODO: If no ISBN given header and writer fields should be required
-    ISBN = request.form.get("ISBN", None)
-    comment = request.form.get("comment", None)
-    if is_valid_isbn(ISBN):
+    form = BookForm(request.form)
+
+    if is_valid_isbn(form.ISBN.data):
         try:
-            book_details = resolve_book_details(ISBN)
-            book = Book(header=book_details["title"], comment=comment,
-                        writer=book_details["author"], ISBN=ISBN)
+            book_details = resolve_book_details(form.ISBN.data)
+            book = Book(header=book_details["title"], comment=form.comment.data,
+                        writer=book_details["author"], ISBN=form.ISBN.data)
         except (RuntimeError, KeyError):
             # TODO Display error message, book fetch failed
             render_template("bookmarks/new.html", bookFetchFailed=True)
     else:
-        header = request.form.get("header", None)
-        writer = request.form.get("writer", None)
-        book = Book(header=header, comment=comment, writer=writer, ISBN=ISBN)
+        book = Book(header=form.header.data, comment=form.comment.data,
+                    writer=form.writer.data, ISBN=form.ISBN.data)
 
     db.session().add(book)
     try:
         db.session().commit()
     except IntegrityError:
         db.session.rollback()
-        return render_template("/bookmarks/new.html", ISBN_taken=True)
+        return render_template("/bookmarks/new.html", form=form, ISBN_taken=True)
 
     return redirect(url_for("bookmarks_list"))

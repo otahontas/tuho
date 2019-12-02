@@ -4,22 +4,21 @@
 <form method="POST" action="{{ url_for('bookmarks_create') }}">
 	<p>If a valid ISBN is given, book details will be resolved automatically. Fields name and writer are ignored book exists with given ISBN.</p>
   	<table>
-
 		<tr>
-			<th>Name:</th>
-			<th><input type="text" name="header"/></th>
+			<th>{{ form.header.label }}</th>
+			<th>{{ form.header }}</th>
 		</tr>
   		<tr>
-			<th>Writer:</th>
-			<th><input type="text" name="writer"/></th>
+			<th>{{ form.writer.label }}</th>
+			<th>{{ form.writer }}</th>
   		</tr>
 		<tr>
-			<th>ISBN:</th>
-			<th><input type="text" name="ISBN"/></th>
+			<th>{{ form.ISBN.label }}</th>
+			<th>{{ form.ISBN }}</th>
   		</tr>
 		<tr>
-			<th>Comment:</th>
-			<th><input type="text" name="comment"/></th>
+			<th>{{ form.comment.label }}</th>
+			<th>{{ form.comment }}</th>
 		</tr>
   	</table>
 		<input type="submit" value="Add a new book"/>
