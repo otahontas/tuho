@@ -28,17 +28,20 @@ def bookmarks_list():
 def get_bookmark(bookmark_id):
     try:
         int(bookmark_id)
-    except ValueError:
-        return render_template("bookmark.html")
+        assert Bookmark.query.get(bookmark_id)
+    except (ValueError, AssertionError):
+        abort(404)
 
-    # TODO: Handle if no bookmark found sqlalchemy.orm.exc.NoResultFound
-    bookmark = Bookmark.query.get(bookmark_id)
+    bookmark = db.session.query(Bookmark).get(bookmark_id)
+    if not bookmark:
+        abort(404)
 
-    if bookmark is None:
-        return render_template("bookmark.html")
+    if bookmark.type == Bookmark.TYPE_BOOK:
+        return render_template("bookmarks/book.html", book=bookmark)
+    elif bookmark.type == Bookmark.TYPE_VIDEO:
+        return render_template("bookmarks/video.html", book=bookmark)
 
-    # TODO: Create bookmark.html template
-    return render_template("bookmark.html", bookmark=bookmark)
+    abort(404)
 
 
 @app.route("/bookmark/delete/<bookmark_id>", methods=["GET"])
