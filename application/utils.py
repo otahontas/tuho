@@ -38,14 +38,11 @@ def is_valid_isbn(ISBN):
     length of 10 or 13 characters.
     """
     if not isinstance(ISBN, str):
-        print("not str")
         return False
 
     if not re.search('^[0-9]+$', ISBN):
-        print("regex")
         return False
 
-    print("len", len(ISBN))
     return len(ISBN) == 10 or len(ISBN) == 13
 
 
