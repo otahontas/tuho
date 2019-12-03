@@ -9,7 +9,7 @@
     {% for t in types %}
     <input type='radio' name='type' value="{{ t[1] }}">{{ t[0] }}<br>
     {% endfor %}
-    
+
     <input type="submit" value="Filter by type">
 </form>
 
@@ -50,7 +50,7 @@
 
 
 <p>
-<a href="{{url_for('bookmarks_form')}}" class="btn btn-outline-success">Lisää uusi kirjanmerkki</a>
+<a href="{{url_for('bookmarks_form')}}" class="btn btn-outline-success">Lisää uusi kirjanmerkki</a> <a href="{{url_for('video_form')}}" class="btn btn-outline-success">Lisää uusi video</a>
 </p>
 <p>
 {% if prev_url %} <a href="{{ prev_url }}">previous page</a> {% endif %}
