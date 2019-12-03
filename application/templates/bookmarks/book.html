@@ -1,0 +1,19 @@
+{% extends "layout.html" %}
+
+{% block body %}
+
+{% if book is defined and book %}
+<h3>Kirja: {{ book.header }}</h3>
+<p>Luettu: {{ book.read_status }} {{ book.read_date }}</p>
+<b>Kirjoittanut: {{ book.writer }}</b>
+<p>{{ book.comment }}</p>
+ISBN: {{ book.ISBN }}
+{% else %}
+<p>Virheellinen kirjanmerkki</p>
+{% endif %}
+
+<p>
+<a href="{{url_for('bookmarks_form')}}" class="btn btn-outline-success">Lisää uusi kirjanmerkki</a>
+<a href="{{url_for('bookmarks_list')}}" class="btn btn-outline-success">Näytä kaikki kirjanmerkit</a>
+</p>
+{% endblock %}
