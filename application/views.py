@@ -2,8 +2,8 @@ from flask import abort, redirect, render_template, request, url_for
 from sqlalchemy.exc import IntegrityError
 
 from application.app import app, db
-from application.models import Book, Bookmark
-from application.forms import BookForm, BookUpdateForm
+from application.models import Book, Bookmark, Video
+from application.forms import BookForm, BookUpdateForm, VideoForm
 
 from .utils import is_valid_isbn, resolve_book_details
 from sqlalchemy_filters import apply_filters, apply_pagination
@@ -48,7 +48,7 @@ def get_bookmark(bookmark_id):
     if bookmark.type == Bookmark.TYPE_BOOK:
         return render_template("bookmarks/book.html", book=bookmark)
     elif bookmark.type == Bookmark.TYPE_VIDEO:
-        return render_template("bookmarks/video.html", book=bookmark)
+        return render_template("bookmarks/video.html", video=bookmark)
 
     abort(404)
 
@@ -166,3 +166,26 @@ def bookmarks_update(bookmark_id):
                                bookmark_id=bookmark_id, ISBN_taken=True)
 
     return redirect(url_for("get_bookmark", bookmark_id=bookmark_id))
+
+
+@app.route("/bookmarks/new/video")
+def video_form():
+    form = VideoForm()
+    return render_template("bookmarks/new/video.html", form=form)
+
+@app.route("/bookmarks/video", methods=["POST"])
+def video_create():
+    form = VideoForm(request.form)
+
+    video = Video(header=form.header.data,
+                  comment=form.comment.data,
+                  URL=form.URL.data)
+
+    db.session().add(video)
+    try:
+        db.session().commit()
+    except IntegrityError:
+        db.session.rollback()
+        return render_template("/bookmarks/new/video.html")
+
+    return redirect(url_for("bookmarks_list"))

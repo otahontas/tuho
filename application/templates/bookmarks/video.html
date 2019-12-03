@@ -1,0 +1,10 @@
+{% extends "layout.html" %}
+
+{% block body %}
+
+{% if video is defined and video %}
+<h3>Video: {{ video.header }} </h3>
+<p>Katsottu: {{ video.read_status }}{{ video.read_date }} </p>
+{% endif %}
+
+{% endblock %}
