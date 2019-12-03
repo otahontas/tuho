@@ -216,6 +216,7 @@ def video_create():
 
     return redirect(url_for("bookmarks_list"))
 
+
 @app.route("/bookmarks/video/edit/<video_id>", methods=["POST"])
 def video_update(video_id):
     try:
