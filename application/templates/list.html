@@ -3,7 +3,7 @@
 {% block body %}
 <h3>Selaa kirjanmerkkejä</h3>
 
-{% if bookmarks %}
+{% if bookmarks.first() %}
 <form action="{{ url_for('bookmarks_list')}}">
     <input type='radio' name='type' value=None>All<br>
     {% for t in types %}
