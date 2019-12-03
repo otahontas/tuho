@@ -7,6 +7,8 @@ from application.forms import BookForm, BookUpdateForm, VideoForm
 
 from .utils import is_valid_isbn, resolve_book_details
 
+import re
+
 
 @app.route("/")
 def index():
@@ -40,7 +42,9 @@ def get_bookmark(bookmark_id):
     if bookmark.type == Bookmark.TYPE_BOOK:
         return render_template("bookmarks/book.html", book=bookmark)
     elif bookmark.type == Bookmark.TYPE_VIDEO:
-        return render_template("bookmarks/video.html", video=bookmark)
+        yt = "https://www.youtube-nocookie.com/embed/"
+        embed = re.sub('http(?:s?):\/\/(?:www\.)?youtu(?:be\.com\/watch\?v=|\.be\/)(&(amp;)?[\w\?=]*)?', yt, bookmark.URL) 
+        return render_template("bookmarks/video.html", video=bookmark, embed=embed)
 
     abort(404)
 
