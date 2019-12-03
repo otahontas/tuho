@@ -50,8 +50,6 @@ def get_bookmark(bookmark_id):
         abort(404)
 
     bookmark = db.session.query(Bookmark).get(bookmark_id)
-    if not bookmark:
-        abort(404)
 
     if bookmark.type == Bookmark.TYPE_BOOK:
         return render_template("bookmarks/book.html", book=bookmark)
@@ -124,8 +122,6 @@ def bookmarks_edit(bookmark_id):
         abort(404)
 
     bookmark = db.session.query(Bookmark).get(bookmark_id)
-    if not bookmark:
-        abort(404)
 
     if bookmark.type == Bookmark.TYPE_BOOK:
         form = BookUpdateForm()
