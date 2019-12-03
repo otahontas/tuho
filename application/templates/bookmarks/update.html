@@ -1,9 +1,13 @@
 {% extends "layout.html"  %}
 
 {% block body %}
-<form method="POST" action="{{ url_for('bookmarks_create') }}">
+<form method="POST" action="{{ url_for('bookmarks_update', bookmark_id=bookmark_id) }}">
 	<p>If a valid ISBN is given, book details will be resolved automatically. Fields name and writer are ignored book exists with given ISBN.</p>
   	<table>
+        <tr>
+            <th>{{ form.read_status.label }}</th>
+            <th>{{ form.read_status }}</th>
+        </tr>
 		<tr>
 			<th>{{ form.header.label }}</th>
 			<th>{{ form.header }}</th>
@@ -21,7 +25,7 @@
 			<th>{{ form.comment }}</th>
 		</tr>
   	</table>
-		<input type="submit" value="Add a new book"/>
+		<input type="submit" value="Update book"/>
 		{% if ISBN_taken %}
 		<p>Book with given ISBN is already in the database</p>
 		{% endif %}

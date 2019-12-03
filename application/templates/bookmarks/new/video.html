@@ -1,0 +1,22 @@
+{% extends "layout.html"  %}
+
+{% block body %}
+<form method="POST" action="{{ url_for('video_create') }}">
+  	<table>
+		<tr>
+			<th>{{ form.header.label }}</th>
+			<th>{{ form.header }}</th>
+		</tr>
+		<tr>
+			<th>{{ form.URL.label }}</th>
+			<th>{{ form.URL }}</th>
+  		</tr>
+		<tr>
+			<th>{{ form.comment.label }}</th>
+			<th>{{ form.comment }}</th>
+		</tr>
+  	</table>
+		<input type="submit" value="Add a new video"/>
+</form>
+{% endblock %}
+
