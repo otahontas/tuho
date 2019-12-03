@@ -1,9 +1,10 @@
 from flask import abort, redirect, render_template, request, url_for
 from sqlalchemy.exc import IntegrityError
+from sqlalchemy_filters import apply_filters, apply_pagination
 
 from application.app import app, db
-from application.models import Book, Bookmark, Video
 from application.forms import BookForm, BookUpdateForm, VideoForm
+from application.models import Book, Bookmark, Video
 
 from .utils import is_valid_isbn, resolve_book_details
 
@@ -18,13 +19,26 @@ def index():
 @app.route("/list", methods=["GET"])
 def bookmarks_list():
     page = request.args.get('page', 1, type=int)
-    bookmarks = Bookmark.query.order_by(Bookmark.header).paginate(page, 5, False)
-    next_url = url_for('bookmarks_list', page=bookmarks.next_num) \
-        if bookmarks.has_next else None
-    prev_url = url_for('bookmarks_list', page=bookmarks.prev_num) \
-        if bookmarks.has_prev else None
-    return render_template("list.html", bookmarks=bookmarks, next_url=next_url,
-                           prev_url=prev_url, current=page)
+    filter_type = request.args.get('type', type=int)
+
+    bookmarks = Bookmark.query
+    types = list({(b.__class__.__name__, b.type) for b in bookmarks})
+
+    if filter_type:
+        filter_spec = [{'field': 'type', 'op': '==', 'value': filter_type}]
+        bookmarks = apply_filters(bookmarks, filter_spec)
+
+    bookmarks, pagination = apply_pagination(bookmarks, page_number=page,
+                                             page_size=5)
+
+    page = pagination.page_number
+    next_url = url_for('bookmarks_list', page=page + 1) \
+        if page < pagination.num_pages else None
+    prev_url = url_for('bookmarks_list', page=page - 1) \
+        if page > 1 else None
+
+    return render_template("list.html", bookmarks=bookmarks, types=types,
+                           next_url=next_url, prev_url=prev_url, current=page)
 
 
 @app.route("/bookmark/<bookmark_id>", methods=["GET"])
@@ -77,11 +91,13 @@ def bookmarks_create():
     if is_valid_isbn(form.ISBN.data):
         try:
             book_details = resolve_book_details(form.ISBN.data)
-            book = Book(header=book_details["title"], comment=form.comment.data,
+            book = Book(header=book_details["title"],
+                        comment=form.comment.data,
                         writer=book_details["author"], ISBN=form.ISBN.data)
         except (RuntimeError, KeyError):
             # TODO Display error message, book fetch failed
-            render_template("bookmarks/new.html", form=form, bookFetchFailed=True)
+            render_template("bookmarks/new.html", form=form,
+                            bookFetchFailed=True)
     else:
         book = Book(header=form.header.data, comment=form.comment.data,
                     writer=form.writer.data, ISBN=form.ISBN.data)
@@ -91,7 +107,8 @@ def bookmarks_create():
         db.session().commit()
     except IntegrityError:
         db.session.rollback()
-        return render_template("/bookmarks/new.html", form=form, ISBN_taken=True)
+        return render_template("/bookmarks/new.html", form=form,
+                               ISBN_taken=True)
 
     return redirect(url_for("bookmarks_list"))
 
@@ -146,7 +163,8 @@ def bookmarks_update(bookmark_id):
         except (RuntimeError, KeyError):
             # TODO Display error message, book fetch failed
             return render_template("bookmarks/update.html", form=form,
-                                   bookmark_id=bookmark_id, bookFetchFailed=True)
+                                   bookmark_id=bookmark_id,
+                                   bookFetchFailed=True)
     else:
         bookmark.header = form.header.data
         bookmark.writer = form.writer.data
@@ -168,6 +186,7 @@ def bookmarks_update(bookmark_id):
 def video_form():
     form = VideoForm()
     return render_template("bookmarks/new/video.html", form=form)
+
 
 @app.route("/bookmarks/video", methods=["POST"])
 def video_create():
