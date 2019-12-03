@@ -48,16 +48,21 @@ def get_bookmark(bookmark_id):
         assert Bookmark.query.get(bookmark_id)
     except (ValueError, AssertionError):
         abort(404)
-
     bookmark = db.session.query(Bookmark).get(bookmark_id)
 
     if bookmark.type == Bookmark.TYPE_BOOK:
         return render_template("bookmarks/book.html", book=bookmark)
     elif bookmark.type == Bookmark.TYPE_VIDEO:
         yt = "https://www.youtube-nocookie.com/embed/"
+        timestamp = request.args.get('timestamp')
         # substitute non-ID part with embed-URL
         embed = re.sub(r'http(?:s?):\/\/(?:www\.)?youtu(?:be\.com\/watch\?v=|\.be\/)' +
                        r'(&(amp;)?[\w\?=]*)?', yt, bookmark.URL)
+        timestamp = request.args.get('timestamp')
+        print("timestamp: ", timestamp)
+        if timestamp:
+            embed += '?start=' + str(timestamp)
+        print(embed)
         return render_template("bookmarks/video.html", video=bookmark, embed=embed)
 
     abort(404)
@@ -190,7 +195,8 @@ def video_create():
 
     video = Video(header=form.header.data,
                   comment=form.comment.data,
-                  URL=form.URL.data)
+                  URL=form.URL.data,
+                  timestamp=form.timestamp.data)
 
     db.session().add(video)
     try:

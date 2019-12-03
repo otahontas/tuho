@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import BooleanField, StringField
+from wtforms import BooleanField, StringField, IntegerField
 
 
 class BookmarkForm(FlaskForm):
@@ -21,3 +21,4 @@ class BookUpdateForm(BookForm):
 
 class VideoForm(BookmarkForm):
     URL = StringField("URL")
+    timestamp = IntegerField("Timestamp")

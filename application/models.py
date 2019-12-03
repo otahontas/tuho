@@ -94,6 +94,7 @@ class Video(Bookmark):
     bookmark_id = db.Column(db.Integer, db.ForeignKey('bookmark.id', ondelete='CASCADE'),
                             primary_key=True)
     URL = db.Column(db.String(250))
+    timestamp = db.Column(db.Integer())
     bookmark = db.relationship('Bookmark', foreign_keys="Video.bookmark_id",
                                backref=db.backref('video', lazy='dynamic'))
 
