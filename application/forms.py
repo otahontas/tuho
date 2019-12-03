@@ -17,3 +17,7 @@ class BookForm(BookmarkForm):
 
 class BookUpdateForm(BookForm):
     read_status = BooleanField("Read")
+
+
+class VideoForm(BookmarkForm):
+    URL = StringField("URL")
