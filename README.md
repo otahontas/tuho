@@ -2,7 +2,9 @@
 Online application for storing interesting videos, books, podcasts and websites as bookmarks.
 
 
-[![Build Status](https://travis-ci.com/otahontas/tuho.svg?branch=master)](https://travis-ci.com/otahontas/tuho)
+[![Build Status](https://travis-ci.com/otahontas/tuho.svg?branch=master)](https://travis-ci.com/otahontas/tuho) [![codecov](https://codecov.io/gh/otahontas/tuho/branch/master/graph/badge.svg)](https://codecov.io/gh/otahontas/tuho)
+
+
 ## Local usage
 
    * Create virtual environment `python3 -m venv venv`
