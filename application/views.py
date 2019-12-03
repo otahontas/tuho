@@ -57,7 +57,9 @@ def get_bookmark(bookmark_id):
         return render_template("bookmarks/book.html", book=bookmark)
     elif bookmark.type == Bookmark.TYPE_VIDEO:
         yt = "https://www.youtube-nocookie.com/embed/"
-        embed = re.sub('http(?:s?):\/\/(?:www\.)?youtu(?:be\.com\/watch\?v=|\.be\/)(&(amp;)?[\w\?=]*)?', yt, bookmark.URL) # substitute non-ID part with embed-URL
+        # substitute non-ID part with embed-URL
+        embed = re.sub(r'http(?:s?):\/\/(?:www\.)?youtu(?:be\.com\/watch\?v=|\.be\/)' +
+                       r'(&(amp;)?[\w\?=]*)?', yt, bookmark.URL)
         return render_template("bookmarks/video.html", video=bookmark, embed=embed)
 
     abort(404)
