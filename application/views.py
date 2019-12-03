@@ -1,3 +1,5 @@
+import re
+
 from flask import abort, redirect, render_template, request, url_for
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy_filters import apply_filters, apply_pagination
@@ -7,8 +9,6 @@ from application.forms import BookForm, BookUpdateForm, VideoForm
 from application.models import Book, Bookmark, Video
 
 from .utils import is_valid_isbn, resolve_book_details
-
-import re
 
 
 @app.route("/")
