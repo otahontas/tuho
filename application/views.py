@@ -138,6 +138,15 @@ def bookmarks_edit(bookmark_id):
         return render_template("bookmarks/update.html", form=form,
                                bookmark_id=bookmark_id)
 
+    if bookmark.type == Bookmark.TYPE_VIDEO:
+        form = VideoForm()
+        form.header.data = bookmark.header
+        form.comment.data = bookmark.comment
+        form.URL.data = bookmark.URL
+        form.timestamp.data = bookmark.timestamp
+        return render_template("bookmarks/update/video.html", form=form,
+                               video_id=bookmark_id)
+
     abort(404)
 
 
@@ -206,3 +215,29 @@ def video_create():
         return render_template("/bookmarks/new/video.html")
 
     return redirect(url_for("bookmarks_list"))
+
+@app.route("/bookmarks/video/edit/<video_id>", methods=["POST"])
+def video_update(video_id):
+    try:
+        int(video_id)
+        assert Bookmark.query.get(video_id)
+    except (ValueError, AssertionError):
+        abort(404)
+
+    video = db.session.query(Bookmark).get(video_id)
+
+    form = VideoForm(request.form)
+
+    video.header = form.header.data
+    video.URL = form.URL.data
+    video.timestamp = form.timestamp.data
+    video.comment = form.comment.data
+
+    try:
+        db.session().commit()
+    except IntegrityError:
+        db.session.rollback()
+        return render_template("update/video.html", form=form,
+                               video_id=video_id)
+
+    return redirect(url_for("get_bookmark", bookmark_id=video_id))
