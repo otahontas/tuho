@@ -6,6 +6,7 @@ from application.models import Book, Bookmark
 from application.forms import BookForm, BookUpdateForm
 
 from .utils import is_valid_isbn, resolve_book_details
+from sqlalchemy_filters import apply_filters, apply_pagination
 
 
 @app.route("/")
@@ -16,13 +17,20 @@ def index():
 @app.route("/list", methods=["GET"])
 def bookmarks_list():
     page = request.args.get('page', 1, type=int)
-    bookmarks = Bookmark.query.order_by(Bookmark.header).paginate(page, 5, False)
-    next_url = url_for('bookmarks_list', page=bookmarks.next_num) \
-        if bookmarks.has_next else None
-    prev_url = url_for('bookmarks_list', page=bookmarks.prev_num) \
-        if bookmarks.has_prev else None
-    return render_template("list.html", bookmarks=bookmarks, next_url=next_url,
-                           prev_url=prev_url, current=page)
+    filter_type = request.args.get('type', type=int)
+    bookmarks = Bookmark.query
+    if filter_type:
+        filter_spec = [{'field': 'type', 'op': '==', 'value': filter_type}]
+        bookmarks = apply_filters(bookmarks,filter_spec)
+    bookmarks, pagination = apply_pagination(bookmarks,page_number=page, page_size=3)
+
+    page = pagination.page_number
+    next_url = url_for('bookmarks_list', page=page+1) \
+        if page < pagination.num_pages else None
+    prev_url = url_for('bookmarks_list', page=page-1) \
+        if page > 1 else None
+    return render_template("list.html", bookmarks=bookmarks,
+           next_url=next_url, prev_url=prev_url, current=page)
 
 
 @app.route("/bookmark/<bookmark_id>", methods=["GET"])
