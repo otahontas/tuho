@@ -23,7 +23,7 @@ class BookFactory(BookmarkFactory):
         sqlalchemy_session_persistence = 'commit'
 
 
-class VideoFactory(BookFactory):
+class VideoFactory(BookmarkFactory):
     URL = "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
 
     class Meta:
