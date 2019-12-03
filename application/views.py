@@ -149,8 +149,6 @@ def bookmarks_update(bookmark_id):
         abort(404)
 
     bookmark = db.session.query(Bookmark).get(bookmark_id)
-    if not bookmark:
-        abort(404)
 
     form = BookUpdateForm(request.form)
 
