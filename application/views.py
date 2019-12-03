@@ -40,7 +40,7 @@ def get_bookmark(bookmark_id):
     if bookmark.type == Bookmark.TYPE_BOOK:
         return render_template("bookmarks/book.html", book=bookmark)
     elif bookmark.type == Bookmark.TYPE_VIDEO:
-        return render_template("bookmarks/video.html", book=bookmark)
+        return render_template("bookmarks/video.html", video=bookmark)
 
     abort(404)
 
