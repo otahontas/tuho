@@ -6,8 +6,10 @@
 {% if bookmarks %}
 <form action="{{ url_for('bookmarks_list')}}">
     <input type='radio' name='type' value=None>All<br>
-    <input type='radio' name='type' value=1>Book<br>
-    <input type='radio' name='type' value=2>Podcast<br>
+    {% for t in types %}
+    <input type='radio' name='type' value="{{ t[1] }}">{{ t[0] }}<br>
+    {% endfor %}
+    
     <input type="submit" value="Filter by type">
 </form>
 

@@ -18,18 +18,24 @@ def index():
 def bookmarks_list():
     page = request.args.get('page', 1, type=int)
     filter_type = request.args.get('type', type=int)
+
     bookmarks = Bookmark.query
+    types = list({(b.__class__.__name__, b.type) for b in bookmarks})
+
     if filter_type:
         filter_spec = [{'field': 'type', 'op': '==', 'value': filter_type}]
         bookmarks = apply_filters(bookmarks,filter_spec)
-    bookmarks, pagination = apply_pagination(bookmarks,page_number=page, page_size=3)
+
+    bookmarks, pagination = apply_pagination(bookmarks,page_number=page, page_size=5)
 
     page = pagination.page_number
     next_url = url_for('bookmarks_list', page=page+1) \
         if page < pagination.num_pages else None
     prev_url = url_for('bookmarks_list', page=page-1) \
         if page > 1 else None
-    return render_template("list.html", bookmarks=bookmarks,
+    
+
+    return render_template("list.html", bookmarks=bookmarks, types=types,
            next_url=next_url, prev_url=prev_url, current=page)
 
 
