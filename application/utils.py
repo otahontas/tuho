@@ -19,6 +19,8 @@ def resolve_book_details(ISBN):
         raise ValueError(f"Inavlid ISBN {ISBN}")
 
     data = _get_book_details(ISBN)
+    if not data:
+        return {}
 
     book = data["items"][0]["volumeInfo"]
     authors = book.get("authors", None)
