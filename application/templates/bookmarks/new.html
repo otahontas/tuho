@@ -1,20 +1,28 @@
 {% extends "layout.html"  %}
 
 {% block body %}
-<form method="POST" action="{{ url_for('bookmarks_create') }}">
-	<p>If a valid ISBN is given, book details will be resolved automatically. Fields name and writer are ignored book exists with given ISBN.</p>
+<form method="POST" action="{{ url_for('bookmarks_create', prefilled=prefilled) }}">
+	<p>If a valid ISBN is given, book details will be resolved automatically. Fields name and writer are ignored if book alredy exists with given ISBN.</p>
   	<table>
 		<tr>
 			<th>{{ form.header.label }}</th>
-			<th>{{ form.header }}</th>
+            {% if book %}
+			<th>{{ form.header(value=book.header)}}</th>
+            {% else %}
+			<th>{{ form.header}}</th>
+            {% endif %}
 		</tr>
   		<tr>
 			<th>{{ form.writer.label }}</th>
+            {% if book %}
+			<th>{{ form.writer(value=book.writer) }}</th>
+            {% else %}
 			<th>{{ form.writer }}</th>
+            {% endif %}
   		</tr>
 		<tr>
 			<th>{{ form.ISBN.label }}</th>
-			<th>{{ form.ISBN }}</th>
+            <th>{{ form.ISBN }}</th>
   		</tr>
 		<tr>
 			<th>{{ form.comment.label }}</th>
@@ -22,12 +30,6 @@
 		</tr>
   	</table>
 		<input type="submit" value="Add a new book"/>
-		{% if ISBN_taken %}
-		<p>Book with given ISBN is already in the database</p>
-		{% endif %}
-		{% if bookFetchFailed %}
-		<p>ISBN fetch failed</p>
-		{% endif %}
 </form>
 {% endblock %}
 

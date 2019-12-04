@@ -1,6 +1,6 @@
 import re
 
-from flask import abort, redirect, render_template, request, url_for
+from flask import abort, flash, redirect, render_template, request, url_for
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy_filters import apply_filters, apply_pagination
 
@@ -90,31 +90,40 @@ def bookmarks_form():
 
 @app.route("/bookmarks", methods=["POST"])
 def bookmarks_create():
-    # TODO: If no ISBN given header and writer fields should be required
     form = BookForm(request.form)
+    prefilled = request.args.get('prefilled')
 
-    if is_valid_isbn(form.ISBN.data):
-        try:
-            book_details = resolve_book_details(form.ISBN.data)
-            book = Book(header=book_details.get("title", form.header.data),
-                        writer=book_details.get("author", form.writer.data),
-                        comment=form.comment.data, ISBN=form.ISBN.data)
-        except (RuntimeError):
-            # TODO Display error message, book fetch failed
-            render_template("bookmarks/new.html", form=form,
-                            bookFetchFailed=True)
+    if prefilled:
+        book = Book(header=form.header.data, writer=form.writer.data,
+                    comment=form.comment.data, ISBN=form.ISBN.data)
     else:
-        book = Book(header=form.header.data, comment=form.comment.data,
-                    writer=form.writer.data, ISBN=form.ISBN.data)
+        if is_valid_isbn(form.ISBN.data):
+            try:
+                book_details = resolve_book_details(form.ISBN.data)
+                book = Book(header=book_details.get("title", form.header.data),
+                            writer=book_details.get("author", form.writer.data),
+                            comment=form.comment.data, ISBN=form.ISBN.data)
+                flash('Name and writer resolved successfully, ' +
+                      'please check that details are correct')
+                return render_template("/bookmarks/new.html", form=form,
+                                       book=book, prefilled=True)
+            except (RuntimeError):
+                flash('Book fetch failed, please give name and title for book yourself')
+                return render_template("/bookmarks/new.html", form=form,
+                                       prefilled=True)
+        else:
+            flash('ISBN given was not valid, please give a valid ISBN instead')
+            return render_template("/bookmarks/new.html", form=form)
 
     db.session().add(book)
     try:
         db.session().commit()
     except IntegrityError:
         db.session.rollback()
-        return render_template("/bookmarks/new.html", form=form,
-                               ISBN_taken=True)
+        flash('Book with given ISBN was already in the database')
+        return render_template("/bookmarks/new.html", form=form)
 
+    flash('Book succefully added')
     return redirect(url_for("bookmarks_list"))
 
 
