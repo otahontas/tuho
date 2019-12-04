@@ -93,11 +93,8 @@ def bookmarks_create():
     form = BookForm(request.form)
     prefilled = request.args.get('prefilled')
 
-    if prefilled:
-        book = Book(header=form.header.data, writer=form.writer.data,
-                    comment=form.comment.data, ISBN=form.ISBN.data)
-    else:
-        if is_valid_isbn(form.ISBN.data):
+    if is_valid_isbn(form.ISBN.data):
+        if not prefilled:
             try:
                 book_details = resolve_book_details(form.ISBN.data)
                 book = Book(header=book_details.get("title", form.header.data),
@@ -112,8 +109,11 @@ def bookmarks_create():
                 return render_template("/bookmarks/new.html", form=form,
                                        prefilled=True)
         else:
-            flash('ISBN given was not valid, please give a valid ISBN instead')
-            return render_template("/bookmarks/new.html", form=form)
+            book = Book(header=form.header.data, writer=form.writer.data,
+                        comment=form.comment.data, ISBN=form.ISBN.data)
+    else:
+        flash('ISBN given was not valid, please give a valid ISBN instead')
+        return render_template("/bookmarks/new.html", form=form)
 
     db.session().add(book)
     try:
