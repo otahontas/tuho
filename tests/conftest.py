@@ -49,6 +49,7 @@ def video():
 
 @pytest.fixture
 def browser():
+    client = None
     options = webdriver.ChromeOptions()
     options.add_argument('headless')
     try:
@@ -78,7 +79,6 @@ def browser():
         yield client
         server.terminate()
         client.close()
-
-    os.close(db_fd)
-    os.unlink(db_path)
-    app_context.pop()
+        os.close(db_fd)
+        os.unlink(db_path)
+        app_context.pop()
