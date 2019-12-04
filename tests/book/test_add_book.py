@@ -1,14 +1,8 @@
 from pytest_bdd import given, scenarios, then, when
 
-
 """Define cucumber tests here with BDD stylings"""
-
-
-# Scenarios
 scenarios('add_book.feature')
 
-
-# Given steps
 
 @given("I haven't added any books")
 def pass_without_books():
@@ -17,12 +11,7 @@ def pass_without_books():
 
 @given("I have a new book with name, writer and isbn")
 def create_book_with_needed_details():
-    return dict(header='test',
-                writer='writer',
-                ISBN=123,
-                comment='comment')
-
-# When steps
+    pass
 
 
 @when("I check what's in database")
@@ -32,11 +21,11 @@ def check_db():
 
 @when("I try to add new book with name, writer and isbn")
 def add_book(client):
-    client.post('/bookmarks',
+    client.post('/bookmarks?prefilled=True',
                 data=dict(
-                    header='test',
-                    writer='writer',
-                    ISBN=123,
+                    header='Introduction to Algorithms',
+                    writer='Thomas H. Cormen',
+                    ISBN='9780262033848',
                     comment='comment'
                 ),
                 follow_redirects=True)
@@ -53,5 +42,5 @@ def check_db_is_empty(client):
 @then("System will add book to db")
 def check_db_has_book(client):
     rv = client.get('/list')
-    assert b'test' in rv.data
+    assert b'Introduction to Algorithms' in rv.data
     assert b'Tietokanta on tyhj' not in rv.data
