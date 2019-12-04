@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import BooleanField, StringField, IntegerField
+from wtforms import BooleanField, IntegerField, StringField
 
 
 class BookmarkForm(FlaskForm):
