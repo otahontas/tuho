@@ -15,6 +15,7 @@ def resolve_book_details(ISBN):
     Returns:
         Dict containing keys: author, title and ISBN or None if book not found
     """
+
     if not is_valid_isbn(ISBN):
         raise ValueError(f"Invalid ISBN {ISBN}")
 
@@ -39,6 +40,7 @@ def is_valid_isbn(ISBN):
     Return True if given value is a valid ISBN number, containing only numbers and has
     length of 10 or 13 characters.
     """
+
     if not isinstance(ISBN, str):
         return False
 

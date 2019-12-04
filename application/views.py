@@ -92,6 +92,7 @@ def bookmarks_form():
 def bookmarks_create():
     form = BookForm(request.form)
     prefilled = request.args.get('prefilled')
+    form.ISBN.data = re.sub(r'[^\d]*', '', form.ISBN.data)
 
     if is_valid_isbn(form.ISBN.data):
         if not prefilled:
