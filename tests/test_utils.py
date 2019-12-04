@@ -1,28 +1,47 @@
 import pytest
-from application import utils
+
+from application.utils import is_valid_isbn, resolve_book_details
 
 
+@pytest.fixture
+def mock(mocker):
+    mock = mocker.Mock()
+    mocker.patch('application.utils.requests', mock)
+
+    mock.get.return_value.status_code = 200
+    mock.get.return_value.json.return_value = {
+        "totalItems": 1,
+        "items": [
+            {
+                "volumeInfo": {
+                    "title": "Mocked book",
+                    "authors": ["J.K. Rowling"],
+                    "ISBN": "9783161484100"
+                }
+            }
+        ]
+    }
+
+    return mock
+
+
+@pytest.mark.usefixtures("mock")
 def test_correct_book_details_are_resolved():
-    ISBN = "9780132350884"
-    details = utils.resolve_book_details(ISBN)
-    assert details["author"] == "Robert C. Martin"
-    assert details["title"] == "Clean Code"
-    assert details["ISBN"] == ISBN
+    details = resolve_book_details("9783161484100")
+    assert details["author"] == "J.K. Rowling"
+    assert details["title"] == "Mocked book"
+    assert details["ISBN"] == "9783161484100"
 
 
 def test_ISBN_validation_works():
-        ISBN = "97801323508"
-        assert utils.is_valid_isbn(ISBN) is False
-        ISBN = "abcdefghij"
-        assert utils.is_valid_isbn(ISBN) is False
+    assert is_valid_isbn("9783161484100")
+
+
+def test_ISBN_validation_with_invalid_value():
+    assert not is_valid_isbn("abcdefghij")
+    assert not is_valid_isbn("123456")
 
 
 def test_valueError_is_raided_with_wrong_isbn():
     with pytest.raises(ValueError):
-        ISBN = "97801323508"
-        details = utils.resolve_book_details(ISBN)
-
-
-def test_no_book_details_are_returned_with_wrong_isbn():
-    ISBN = "97801323508"
-    assert utils._get_book_details(ISBN) is None
+        resolve_book_details("97801323508")
