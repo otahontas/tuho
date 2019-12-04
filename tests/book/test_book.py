@@ -70,7 +70,6 @@ def test_bookform_is_rendered_correctly(client):
     assert b'<input type="submit" value="Add a new book"/>' in rv.data
 
 
-
 @pytest.mark.usefixtures("mock_succesful_api_fetch")
 def test_correct_details_are_prefilled_correctly(client):
     bookData = dict(ISBN='9780262033848')
