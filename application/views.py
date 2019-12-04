@@ -96,10 +96,10 @@ def bookmarks_create():
     if is_valid_isbn(form.ISBN.data):
         try:
             book_details = resolve_book_details(form.ISBN.data)
-            book = Book(header=book_details["title"],
-                        comment=form.comment.data,
-                        writer=book_details["author"], ISBN=form.ISBN.data)
-        except (RuntimeError, KeyError):
+            book = Book(header=book_details.get("title", form.header.data),
+                        writer=book_details.get("author", form.writer.data),
+                        comment=form.comment.data, ISBN=form.ISBN.data)
+        except (RuntimeError):
             # TODO Display error message, book fetch failed
             render_template("bookmarks/new.html", form=form,
                             bookFetchFailed=True)
