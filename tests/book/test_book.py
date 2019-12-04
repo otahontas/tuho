@@ -9,7 +9,6 @@ def test_book_insertion(client):
                      follow_redirects=True)
     assert b'test' in rv.data
 
-
 def test_nonuniq_isbn_not_added(client):
     bookData = dict(header='test',
                     writer='writer',
