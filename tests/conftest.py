@@ -1,7 +1,6 @@
 import os
 import tempfile
 import time
-import threading
 from multiprocessing import Process
 
 import pytest
@@ -54,7 +53,7 @@ def browser():
     options.add_argument('headless')
     try:
         client = webdriver.Chrome(options=options)
-    except:
+    except Exception:
         pass
 
     if client:
