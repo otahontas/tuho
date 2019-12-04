@@ -4,11 +4,10 @@ import time
 from multiprocessing import Process
 
 import pytest
+from selenium import webdriver
 
 from application import app, db
 from application.factories import BookFactory, BookmarkFactory, VideoFactory
-
-from selenium import webdriver
 
 
 def bind_factories(session):
