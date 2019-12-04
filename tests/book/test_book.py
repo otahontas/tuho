@@ -19,3 +19,12 @@ def test_nonuniq_isbn_not_added(client):
     rv = client.post('/bookmarks', data=bookData, follow_redirects=True)
     print(str(rv.data))
     assert b'Book with given ISBN is already in the database' in rv.data
+
+
+def test_add_video_form(client):
+    resp = client.get("/bookmarks/new")
+    assert resp.status_code == 200
+
+    data = str(resp.data)
+
+    assert '<input type="submit" value="Add a new book"/>' in data
