@@ -11,12 +11,12 @@ def resolve_book_details(ISBN):
     Return dict containing author and book title based on ISBN.
 
     Args:
-        ISBN: Book ISBN-numer as string without hyphens, containing 10 or 13 numbers
+        ISBN: Book ISBN-number as string without hyphens, containing 10 or 13 numbers
     Returns:
         Dict containing keys: author, title and ISBN or None if book not found
     """
     if not is_valid_isbn(ISBN):
-        raise ValueError(f"Inavlid ISBN {ISBN}")
+        raise ValueError(f"Invalid ISBN {ISBN}")
 
     data = _get_book_details(ISBN)
     if not data:
@@ -51,7 +51,7 @@ def is_valid_isbn(ISBN):
 def _get_book_details(ISBN):
     """ Get book details by ISBN from API """
 
-    response = requests.get(f'{API_URL}?q=isbn{ISBN}')
+    response = requests.get(f'{API_URL}?q=isbn:{ISBN}')
 
     if response.status_code != 200:
         raise RuntimeError("Api request to resolve book details failed")
