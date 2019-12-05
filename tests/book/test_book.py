@@ -34,21 +34,21 @@ def test_nonuniq_isbn_not_added(client):
                     writer='Thomas H. Cormen',
                     ISBN='9780262033848',
                     comment='comment')
-    client.post('/bookmarks?prefilled=True', data=bookData, follow_redirects=True)
-    rv = client.post('/bookmarks?prefilled=True', data=bookData, follow_redirects=True)
+    client.post('/bookmarks/book?prefilled=True', data=bookData, follow_redirects=True)
+    rv = client.post('/bookmarks/book?prefilled=True', data=bookData, follow_redirects=True)
     assert b'Book with given ISBN was already in the database' in rv.data
 
 
 def test_nonvalid_isbn_is_not_added_and_error_is_shown(client):
     bookData = dict(ISBN='9780033')
-    rv = client.post('/bookmarks', data=bookData, follow_redirects=True)
+    rv = client.post('/bookmarks/book', data=bookData, follow_redirects=True)
     assert b'ISBN given was not valid, please give a valid ISBN instead' in rv.data
 
 
 @pytest.mark.usefixtures("mock_failed_status_code")
 def test_valid_but_nonexisting_isbn_is_not_added_and_error_is_shown(client):
     bookData = dict(ISBN='9999999999')
-    rv = client.post('/bookmarks', data=bookData, follow_redirects=True)
+    rv = client.post('/bookmarks/book', data=bookData, follow_redirects=True)
     assert b'Book fetch failed, please give name and title for book yourself' in rv.data
 
 
@@ -57,12 +57,12 @@ def test_isbn_changed_to_nonvalid_after_prefilling_is_not_added(client):
                     writer='Thomas H. Cormen',
                     ISBN='9780',
                     comment='comment')
-    rv = client.post('/bookmarks?prefilled=True', data=bookData, follow_redirects=True)
+    rv = client.post('/bookmarks/book?prefilled=True', data=bookData, follow_redirects=True)
     assert b'ISBN given was not valid, please give a valid ISBN instead' in rv.data
 
 
 def test_bookform_is_rendered_correctly(client):
-    rv = client.get('/bookmarks/new')
+    rv = client.get('/bookmarks/new/book')
     assert b'Name' in rv.data
     assert b'Writer' in rv.data
     assert b'ISBN' in rv.data
@@ -73,6 +73,6 @@ def test_bookform_is_rendered_correctly(client):
 @pytest.mark.usefixtures("mock_succesful_api_fetch")
 def test_correct_details_are_prefilled_correctly(client):
     bookData = dict(ISBN='9780262033848')
-    rv = client.post('/bookmarks', data=bookData, follow_redirects=True)
+    rv = client.post('/bookmarks/book', data=bookData, follow_redirects=True)
     assert b'Introduction to Algorithms' in rv.data
     assert b'Thomas H. Cormen' in rv.data

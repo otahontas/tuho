@@ -1,6 +1,6 @@
 def test_edit_book(client, book):
     """ Assert that book instance is edited """
-    response = client.post(f"/bookmarks/edit/{book.id}",
+    response = client.post(f"/bookmarks/book/edit/{book.id}",
                            data=dict(
                                header="test_header",
                                writer="writer",
@@ -13,17 +13,17 @@ def test_edit_book(client, book):
 
 
 def test_edit_form_non_exists_book(client):
-    response = client.get(f"/bookmarks/edit/-1")
+    response = client.get(f"/bookmarks/book/edit/-1", follow_redirects=True)
     assert response.status_code == 404
 
 
 def test_edit_non_exists_book(client):
-    response = client.post(f"/bookmarks/edit/-1", data={})
+    response = client.post(f"/bookmarks/book/edit/-1", data={}, follow_redirects=True)
     assert response.status_code == 404
 
 
 def test_edit_form(client, book):
-    resp = client.get(f"/bookmarks/edit/{book.id}")
+    resp = client.get(f"/bookmarks/book/edit/{book.id}", follow_redirects=True)
     assert resp.status_code == 200
 
     data = str(resp.data)

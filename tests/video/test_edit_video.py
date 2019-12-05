@@ -3,7 +3,7 @@ from application.models import Video
 
 
 def test_edit_form(client, video):
-    resp = client.get(f"/bookmarks/edit/{video.id}")
+    resp = client.get(f"/bookmarks/edit/{video.id}", follow_redirects=True)
     assert resp.status_code == 200
 
     data = str(resp.data)

@@ -22,7 +22,7 @@ def check_db():
 
 @when("I try to add new book with name, writer and isbn")
 def add_book(client):
-    client.post('/bookmarks?prefilled=True',
+    client.post('/bookmarks/book?prefilled=True',
                 data=dict(
                     header='Introduction to Algorithms',
                     writer='Thomas H. Cormen',
