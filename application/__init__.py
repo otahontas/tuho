@@ -1,6 +1,6 @@
 from application import models  # noqa: F401
-from application.views import views, video, book  # noqa: F401
 from application.app import app, db  # noqa: F401
+from application.views import book, video, views  # noqa: F401
 
 
 try:

@@ -35,7 +35,8 @@ def test_nonuniq_isbn_not_added(client):
                     ISBN='9780262033848',
                     comment='comment')
     client.post('/bookmarks/book?prefilled=True', data=bookData, follow_redirects=True)
-    rv = client.post('/bookmarks/book?prefilled=True', data=bookData, follow_redirects=True)
+    rv = client.post('/bookmarks/book?prefilled=True', data=bookData,
+                     follow_redirects=True)
     assert b'Book with given ISBN was already in the database' in rv.data
 
 
@@ -57,7 +58,8 @@ def test_isbn_changed_to_nonvalid_after_prefilling_is_not_added(client):
                     writer='Thomas H. Cormen',
                     ISBN='9780',
                     comment='comment')
-    rv = client.post('/bookmarks/book?prefilled=True', data=bookData, follow_redirects=True)
+    rv = client.post('/bookmarks/book?prefilled=True', data=bookData,
+                     follow_redirects=True)
     assert b'ISBN given was not valid, please give a valid ISBN instead' in rv.data
 
 

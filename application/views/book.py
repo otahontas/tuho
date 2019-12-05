@@ -1,6 +1,6 @@
 import re
 
-from flask import redirect, flash, render_template, request, url_for
+from flask import flash, redirect, render_template, request, url_for
 from sqlalchemy.exc import IntegrityError
 
 from application.app import app, db
