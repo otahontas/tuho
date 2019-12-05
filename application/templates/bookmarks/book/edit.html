@@ -1,7 +1,7 @@
 {% extends "layout.html"  %}
 
 {% block body %}
-<form method="POST" action="{{ url_for('bookmarks_update', bookmark_id=bookmark_id) }}">
+<form method="POST" action="{{ url_for('book_update', book_id=bookmark_id) }}">
 	<p>If a valid ISBN is given, book details will be resolved automatically. Fields name and writer are ignored book exists with given ISBN.</p>
   	<table>
         <tr>

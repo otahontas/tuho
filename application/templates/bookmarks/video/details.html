@@ -11,7 +11,7 @@
 <a href="{{url_for('get_bookmark', bookmark_id=video.id, timestamp=video.timestamp)}}">view from timestamp at {{ video.timestamp }} seconds</a><br>
 {% endif %}
 <iframe width="560"height="315"src="{{ embed }}"frameborder="0"></iframe><br>
-<a href="{{url_for('index')}}">Back to bookmark listing</a>
+<a href="{{url_for('video_update', video_id=video.id)}}">Edit bookmark</a> <a href="{{url_for('index')}}">Back to bookmark listing</a>
 
 {% endif %}
 
