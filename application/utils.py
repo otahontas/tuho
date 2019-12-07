@@ -31,6 +31,7 @@ def resolve_book_details(ISBN):
     return {
         "author": authors,
         "title": book["title"],
+        "image": book.get("imageLinks", {}).get("thumbnail", ""),
         "ISBN": ISBN
     }
 

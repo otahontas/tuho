@@ -13,6 +13,7 @@ class BookmarkForm(FlaskForm):
 class BookForm(BookmarkForm):
     writer = StringField("Writer")
     ISBN = StringField("ISBN")
+    image = StringField("Image URL")
 
 
 class BookUpdateForm(BookForm):

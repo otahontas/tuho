@@ -29,6 +29,7 @@ def book_create():
                 book_details = resolve_book_details(form.ISBN.data)
                 book = Book(header=book_details.get("title", form.header.data),
                             writer=book_details.get("author", form.writer.data),
+                            image=book_details.get("image", ""),
                             comment=form.comment.data, ISBN=form.ISBN.data)
                 flash('Name and writer resolved successfully, ' +
                       'please check that details are correct')
@@ -40,7 +41,8 @@ def book_create():
                                        prefilled=True)
         else:
             book = Book(header=form.header.data, writer=form.writer.data,
-                        comment=form.comment.data, ISBN=form.ISBN.data)
+                        comment=form.comment.data, ISBN=form.ISBN.data,
+                        image=form.image.data)
     else:
         flash('ISBN given was not valid, please give a valid ISBN instead')
         return render_template("/bookmarks/book/new.html", form=form)
@@ -68,6 +70,7 @@ def book_update(book_id, bookmark=None):
         form.comment.data = bookmark.comment
         form.writer.data = bookmark.writer
         form.ISBN.data = bookmark.ISBN
+        form.image.data = bookmark.image
         form.read_status.data = bookmark.read_status
         return render_template("bookmarks/book/edit.html", form=form,
                                bookmark_id=book_id)
@@ -79,6 +82,7 @@ def book_update(book_id, bookmark=None):
             book_details = resolve_book_details(form.ISBN.data)
             bookmark.header = book_details["title"]
             bookmark.writer = book_details["author"]
+            bookmark.image = book_details["image"]
             bookmark.comment = form.writer.data
             bookmark.ISBN = form.ISBN.data
             bookmark.read_status = form.read_status.data
@@ -91,6 +95,7 @@ def book_update(book_id, bookmark=None):
         bookmark.header = form.header.data
         bookmark.writer = form.writer.data
         bookmark.comment = form.comment.data
+        bookmark.image = form.image.data
         bookmark.ISBN = form.ISBN.data
         bookmark.read_status = form.read_status.data
 
