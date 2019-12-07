@@ -45,6 +45,7 @@ class Book(Bookmark):
     writer = db.Column(db.String(250))
     bookmark = db.relationship('Bookmark', foreign_keys="Book.bookmark_id",
                                backref=db.backref('books', lazy='dynamic'))
+    image = db.Column(db.String(500))
 
     __mapper_args__ = {
         'polymorphic_identity': 'book',

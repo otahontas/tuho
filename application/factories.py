@@ -17,6 +17,7 @@ class BookmarkFactory(factory.alchemy.SQLAlchemyModelFactory):
 class BookFactory(BookmarkFactory):
     ISBN = factory.Faker('isbn13', separator="")
     writer = factory.Faker('name')
+    image = factory.Faker('file_name', extension="jpg")
 
     class Meta:
         model = Book
