@@ -4,6 +4,13 @@
 
 {% if book is defined and book %}
 <h3>Kirja: {{ book.header }}</h3>
+<p>
+{% if book.image %}
+<img src="{{ book.image }}" alt="Book image">
+{% else %}
+<img src="{{ url_for('static', filename='cover-placeholder.jpg') }}">
+{% endif %}
+</p>
 <p>Luettu: {{ book.read_status }} {{ book.read_date }}</p>
 <b>Kirjoittanut: {{ book.writer }}</b>
 <p>{{ book.comment }}</p>

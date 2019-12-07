@@ -23,6 +23,14 @@
 		<tr>
 			<th>{{ form.ISBN.label }}</th>
             <th>{{ form.ISBN }}</th>
+		  </tr>
+		  <tr>
+			<th>{{ form.image.label }}</th>
+			{% if book %}
+			<th>{{ form.image(value=book.image) }}</th>
+            {% else %}
+			<th>{{ form.image }}</th>
+            {% endif %}
   		</tr>
 		<tr>
 			<th>{{ form.comment.label }}</th>
