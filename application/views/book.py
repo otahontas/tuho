@@ -83,7 +83,7 @@ def book_update(book_id, bookmark=None):
             bookmark.header = book_details["title"]
             bookmark.writer = book_details["author"]
             bookmark.image = book_details["image"]
-            bookmark.comment = form.writer.data
+            bookmark.comment = form.comment.data
             bookmark.ISBN = form.ISBN.data
             bookmark.read_status = form.read_status.data
         except (RuntimeError, KeyError):
