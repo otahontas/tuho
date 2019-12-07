@@ -1,5 +1,7 @@
 import pytest
 
+from application.models import Book
+
 
 @pytest.fixture
 def mock_failed_status_code(mocker):
@@ -21,12 +23,28 @@ def mock_succesful_api_fetch(mocker):
                 "volumeInfo": {
                     "title": "Introduction to Algorithms",
                     "authors": ["Thomas H. Cormen"],
-                    "ISBN": "9780262033848"
+                    "ISBN": "9780262033848",
+                    "imageLinks": {"thumbnail": "super_cool_image.png"}
                 }
             }
         ]
     }
     return mock
+
+
+def test_add_book(client):
+    client.post('/bookmarks/book?prefilled=True', follow_redirects=True,
+                data={"header": "Best book", "writer": "Cool writer",
+                      "ISBN": '9780262033841', "comment": "This is a comment",
+                      "image": "super_cool_image.png"})
+
+    book = Book.query.one()
+
+    assert book.header == "Best book"
+    assert book.writer == "Cool writer"
+    assert book.ISBN == "9780262033841"
+    assert book.comment == "This is a comment"
+    assert book.image == "super_cool_image.png"
 
 
 def test_nonuniq_isbn_not_added(client):
