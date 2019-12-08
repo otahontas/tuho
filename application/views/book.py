@@ -64,34 +64,9 @@ def book_update(book_id, bookmark=None):
     if not bookmark:
         bookmark = Bookmark.query.get_or_404(book_id)
 
-    if request.method == "GET":
-        form = BookUpdateForm()
-        form.header.data = bookmark.header
-        form.comment.data = bookmark.comment
-        form.writer.data = bookmark.writer
-        form.ISBN.data = bookmark.ISBN
-        form.image.data = bookmark.image
-        form.read_status.data = bookmark.read_status
-        return render_template("bookmarks/book/edit.html", form=form,
-                               bookmark_id=book_id)
+    form = BookUpdateForm()
 
-    form = BookUpdateForm(request.form)
-
-    if is_valid_isbn(form.ISBN.data):
-        try:
-            book_details = resolve_book_details(form.ISBN.data)
-            bookmark.header = book_details["title"]
-            bookmark.writer = book_details["author"]
-            bookmark.image = book_details["image"]
-            bookmark.comment = form.comment.data
-            bookmark.ISBN = form.ISBN.data
-            bookmark.read_status = form.read_status.data
-        except (RuntimeError, KeyError):
-            # TODO Display error message, book fetch failed
-            return render_template("bookmarks/book/edit.html", form=form,
-                                   bookmark_id=book_id,
-                                   bookFetchFailed=True)
-    else:
+    if form.validate_on_submit():
         bookmark.header = form.header.data
         bookmark.writer = form.writer.data
         bookmark.comment = form.comment.data
@@ -99,11 +74,20 @@ def book_update(book_id, bookmark=None):
         bookmark.ISBN = form.ISBN.data
         bookmark.read_status = form.read_status.data
 
-    try:
-        db.session().commit()
-    except IntegrityError:
-        db.session.rollback()
-        return render_template("bookmarks/video/edit.html", form=form,
-                               bookmark_id=book_id, ISBN_taken=True)
+        try:
+            db.session().commit()
+        except IntegrityError:
+            db.session.rollback()
+            return render_template("bookmarks/video/edit.html", form=form,
+                                   bookmark_id=book_id, ISBN_taken=True)
 
-    return redirect(url_for("get_bookmark", bookmark_id=book_id))
+        return redirect(url_for("get_bookmark", bookmark_id=book_id))
+
+    form.header.data = bookmark.header
+    form.comment.data = bookmark.comment
+    form.writer.data = bookmark.writer
+    form.ISBN.data = bookmark.ISBN
+    form.image.data = bookmark.image
+    form.read_status.data = bookmark.read_status
+    return render_template("bookmarks/book/edit.html", form=form,
+                           bookmark_id=book_id)
