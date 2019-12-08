@@ -2,7 +2,7 @@ from flask import redirect, render_template, request, url_for
 from sqlalchemy.exc import IntegrityError
 
 from application.app import app, db
-from application.forms import VideoForm
+from application.forms import VideoForm, VideoUpdateForm
 from application.models import Bookmark, Video
 
 
@@ -37,21 +37,23 @@ def video_update(video_id, bookmark=None):
         video = Bookmark.query.get_or_404(video_id)
 
     if request.method == "GET":
-        form = VideoForm()
+        form = VideoUpdateForm()
         form.header.data = video.header
         form.comment.data = video.comment
         form.URL.data = video.URL
         form.timestamp.data = video.timestamp
+        form.read_status.data = video.read_status
         return render_template("bookmarks/video/edit.html", form=form,
                                video_id=video_id)
 
-    form = VideoForm(request.form)
+    form = VideoUpdateForm(request.form)
     # TODO: validate form
 
     video.header = form.header.data
     video.URL = form.URL.data
     video.timestamp = form.timestamp.data
     video.comment = form.comment.data
+    video.read_status = form.read_status.data
 
     try:
         db.session().commit()

@@ -2,7 +2,11 @@
 
 {% block body %}
 <form method="POST" action="{{ url_for('video_update', video_id=video_id) }}">
-  	<table>
+	<table>
+		<tr>
+			<th>{{ form.read_status.label }}</th>
+			<th>{{ form.read_status }}</th>
+		</tr>
 		<tr>
 			<th>{{ form.header.label }}</th>
 			<th>{{ form.header }}</th>
@@ -10,7 +14,7 @@
 		<tr>
 			<th>{{ form.URL.label }}</th>
 			<th>{{ form.URL }}</th>
-  		</tr>
+		</tr>
 		<tr>
 			<th>{{ form.timestamp.label }}</th>
 			<th>{{ form.timestamp }}</th>
@@ -19,7 +23,7 @@
 			<th>{{ form.comment.label }}</th>
 			<th>{{ form.comment }}</th>
 		</tr>
-  	</table>
-		<input type="submit" value="Update video"/>
+	</table>
+	<input type="submit" value="Update video" />
 </form>
 {% endblock %}
