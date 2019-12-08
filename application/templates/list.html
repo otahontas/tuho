@@ -3,7 +3,7 @@
 {% block body %}
 
 <img src="{{ url_for('static', filename='under_construction.gif') }}">
-<h3>Browse bookmarks</h3>
+<h2>Browse bookmarks</h2>
 
 <table class="table">
   <tr>
@@ -35,8 +35,6 @@
       <th scope="col">Bookmark</th>
       <th scope="col">Type</th>
       <th scope="col">Seen?</th>
-      <th scope="col"></th>
-      <th scope="col"></th>
     </tr>
   </thead>
   <tbody>
@@ -46,11 +44,14 @@
         <a href="{{url_for('get_bookmark', bookmark_id=bookmark.id)}}">{{ bookmark.header }}</a>
       </td>
       <td>
-        <!-- TODO: Declare types in Bookmark model -->
         {{ bookmark.__class__.__name__ }}
       </td>
       <td>
-        {{ bookmark.read_status }}
+        {% if bookmark.read_status %}
+        <p style="color: green">&#10004;</p>
+        {% else %}
+        <p style="color: red">&#10799;</p>
+        {% endif %}
       </td>
       <td>
         <a href="{{url_for('bookmarks_edit', bookmark_id=bookmark.id)}}" class="btn btn-primary">Edit</a>
