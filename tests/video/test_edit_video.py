@@ -8,7 +8,7 @@ def test_edit_form(client, video):
 
     data = str(resp.data)
 
-    assert '<input type="submit" value="Update video"/>' in data
+    assert '<input type="submit" value="Update video" />' in data
 
 
 def test_edit_video(client, video):

@@ -24,5 +24,6 @@ class VideoForm(BookmarkForm):
     URL = StringField("URL")
     timestamp = IntegerField("Timestamp")
 
+
 class VideoUpdateForm(VideoForm):
     read_status = BooleanField("Read")
