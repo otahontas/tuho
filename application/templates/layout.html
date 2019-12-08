@@ -7,7 +7,11 @@
 
   <body>
       <a href="{{url_for('bookmarks_list')}}" class="btn btn-outline-success">
-          <h1>TUHO Lukuvinkkikirjasto</h1>
+          <h1>
+            <img src="{{ url_for('static', filename='globe.gif') }}">
+            TUHO Lukuvinkkikirjasto
+            <img src="/static/globe.gif">
+          </h1>
       </a>
       {% with messages = get_flashed_messages() %}
         {% if messages %}
@@ -24,5 +28,10 @@
       Content goes here
     </p>
     {% endblock %}
+    <br><br><br>
+    <img src="{{ url_for('static', filename='counter.gif') }}">
+    <img src="{{ url_for('static', filename='ns_logo.gif') }}">
+    <img src="{{ url_for('static', filename='ie_logo.gif') }}">
+    <img src="{{ url_for('static', filename='notepad.gif') }}">
   </body>
 </html>
