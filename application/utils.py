@@ -2,6 +2,11 @@ import re
 
 import requests
 
+import urllib.request
+import urllib
+import json
+import pprint
+
 
 API_URL = 'https://www.googleapis.com/books/v1/volumes'
 
@@ -63,3 +68,17 @@ def _get_book_details(ISBN):
     if data["totalItems"] == 0:
         return None
     return data
+
+
+def get_video_title(link):
+    """ Get video title for a given YouTube-link """
+
+    params = {"format": "json", "url": link}
+    query_url = "https://www.youtube.com/oembed"
+    query_string = urllib.parse.urlencode(params)
+    query_url += "?" + query_string
+
+    with urllib.request.urlopen(query_url) as response:
+        response_text = response.read()
+        data = json.loads(response_text.decode())
+        return data['title']

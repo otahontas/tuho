@@ -1,9 +1,11 @@
-from flask import redirect, render_template, request, url_for
+from flask import flash, redirect, render_template, request, url_for
 from sqlalchemy.exc import IntegrityError
 
 from application.app import app, db
 from application.forms import VideoForm, VideoUpdateForm
 from application.models import Bookmark, Video
+
+from ..utils import get_video_title
 
 
 @app.route("/bookmarks/new/video")
@@ -15,11 +17,27 @@ def video_form():
 @app.route("/bookmarks/video", methods=["POST"])
 def video_create():
     form = VideoForm(request.form)
+    if not form.header.data:
+        try:
+            title = get_video_title(form.URL.data)
+            form.header.data = title
+            video = Video(header=title,
+                          comment=form.comment.data,
+                          URL=form.URL.data,
+                          timestamp=form.timestamp.data)
 
-    video = Video(header=form.header.data,
-                  comment=form.comment.data,
-                  URL=form.URL.data,
-                  timestamp=form.timestamp.data)
+            flash('Title updated')
+            return render_template("bookmarks/video/new.html", form=form,
+                    video=video)
+        except (RuntimeError):
+            flash('Check the link')
+
+            return render_template("bookmarks/video/new.html", form=form)
+    else:
+        video = Video(header=form.header.data,
+                      comment=form.comment.data,
+                      URL=form.URL.data,
+                      timestamp=form.timestamp.data)
 
     db.session().add(video)
     try:
