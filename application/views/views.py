@@ -16,13 +16,23 @@ def index():
 def bookmarks_list():
     page = request.args.get('page', 1, type=int)
     filter_type = request.args.get('type', type=int)
+    filter_seen = request.args.get('seen', type=int)
 
     bookmarks = Bookmark.query
     types = list({(b.__class__.__name__, b.type) for b in bookmarks})
 
+    filter_spec = []
+
     if filter_type:
-        filter_spec = [{'field': 'type', 'op': '==', 'value': filter_type}]
-        bookmarks = apply_filters(bookmarks, filter_spec)
+        filter_spec.append({'field': 'type', 'op': '==', 'value': filter_type})
+    if filter_seen:
+        if filter_seen == 1:
+            op = '=='
+        elif filter_seen == 2:
+            op = '!='
+        filter_spec.append({'field': 'read_status', 'op': op, 'value': True})
+    
+    bookmarks = apply_filters(bookmarks, filter_spec)       
 
     bookmarks, pagination = apply_pagination(bookmarks, page_number=page,
                                              page_size=5)

@@ -3,57 +3,73 @@
 {% block body %}
 <h3>Selaa kirjanmerkkejä</h3>
 
-{% if bookmarks.first() %}
-<form action="{{ url_for('bookmarks_list')}}">
-    <input type='radio' name='type' value=None>All<br>
-    {% for t in types %}
-    <input type='radio' name='type' value="{{ t[1] }}">{{ t[0] }}<br>
-    {% endfor %}
+<table class="table">
+  <tr>
+    <form action="{{ url_for('bookmarks_list')}}">
+      <td>
+        <input type='radio' name='type' value=None>All<br>
+        {% for t in types %}
+        <input type='radio' name='type' value="{{ t[1] }}">{{ t[0] }}<br>
+        {% endfor %}
+      </td>
+      <td>
+        <input type='radio' name='seen' value=1>Seen<br>
+        <input type='radio' name='seen' value=2>Not seen<br>
+      </td>
+  </tr>
 
-    <input type="submit" value="Filter by type">
-</form>
+  <tr>
+    <td>
+      <input type="submit" value="Filter">
+    </td>
+    </form>
+  </tr>
+</table>
+{% if bookmarks.first() %}
 
 <table class="table">
-    <thead>
-      <tr>
-        <th scope="col">Kirjanmerkki</th>
-        <th scope="col">Tyyppi</th>
-        <th scope="col">Luettu?</th>
-        <th scope="col"></th>
-        <th scope="col"></th>
-      </tr>
-    </thead>
-    <tbody>
-        {% for bookmark in bookmarks %}
-        <tr>
-          <td>
-            <a href="{{url_for('get_bookmark', bookmark_id=bookmark.id)}}">{{ bookmark.header }}</a>
-          </td>
-          <td>
-              <!-- TODO: Declare types in Bookmark model -->
-              {{ bookmark.__class__.__name__ }}
-          </td>
-          <td>
-              {{ bookmark.read_status }}
-          </td>
-          <td>
-            <a href="{{url_for('bookmarks_edit', bookmark_id=bookmark.id)}}" class="btn btn-primary">Muokkaa</a>
-            <a href="{{url_for('delete_bookmark', bookmark_id=bookmark.id)}}" onclick="return confirm('Oletko varma?')" class="btn btn-danger">Tuhoa</a>
-          </td>
-        </tr>
-        {% endfor %}
-    </tbody>
-  </table>
-  {% else %}
-  <p>Tietokanta on tyhjä.</p>
-  {% endif %}
+  <thead>
+    <tr>
+      <th scope="col">Kirjanmerkki</th>
+      <th scope="col">Tyyppi</th>
+      <th scope="col">Luettu?</th>
+      <th scope="col"></th>
+      <th scope="col"></th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for bookmark in bookmarks %}
+    <tr>
+      <td>
+        <a href="{{url_for('get_bookmark', bookmark_id=bookmark.id)}}">{{ bookmark.header }}</a>
+      </td>
+      <td>
+        <!-- TODO: Declare types in Bookmark model -->
+        {{ bookmark.__class__.__name__ }}
+      </td>
+      <td>
+        {{ bookmark.read_status }}
+      </td>
+      <td>
+        <a href="{{url_for('bookmarks_edit', bookmark_id=bookmark.id)}}" class="btn btn-primary">Muokkaa</a>
+        <a href="{{url_for('delete_bookmark', bookmark_id=bookmark.id)}}" onclick="return confirm('Oletko varma?')"
+          class="btn btn-danger">Tuhoa</a>
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% else %}
+<p>Tietokanta on tyhjä.</p>
+{% endif %}
 
 
 <p>
-<a href="{{url_for('bookmarks_form')}}" class="btn btn-outline-success">Lisää uusi kirjanmerkki</a> <a href="{{url_for('video_form')}}" class="btn btn-outline-success">Lisää uusi video</a>
+  <a href="{{url_for('bookmarks_form')}}" class="btn btn-outline-success">Lisää uusi kirjanmerkki</a> <a
+    href="{{url_for('video_form')}}" class="btn btn-outline-success">Lisää uusi video</a>
 </p>
 <p>
-{% if prev_url %} <a href="{{ prev_url }}">previous page</a> {% endif %}
-{% if next_url %} <a href="{{ next_url }}">next page</a> {% endif %}
+  {% if prev_url %} <a href="{{ prev_url }}">previous page</a> {% endif %}
+  {% if next_url %} <a href="{{ next_url }}">next page</a> {% endif %}
 </p>
 {% endblock %}
