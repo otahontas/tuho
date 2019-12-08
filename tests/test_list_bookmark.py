@@ -1,7 +1,7 @@
 def test_empty_db(client):
     response = client.get('/list')
     assert response.status_code == 200
-    assert b'Tietokanta on tyhj' in response.data
+    assert b'No bookmarks' in response.data
 
 
 def test_with_one_book(client, book):
@@ -16,4 +16,4 @@ def test_with_one_book(client, book):
 def test_no_books_shown_when_filtering_with_videos(client, book):
     response = client.get('/list?type=4')
     assert response.status_code == 200
-    assert b'Tietokanta on tyhj' in response.data
+    assert b'No bookmarks' in response.data

@@ -37,11 +37,11 @@ def add_book(client):
 @then("System will report that db is empty")
 def check_db_is_empty(client):
     rv = client.get('/list')
-    assert b'Tietokanta on tyhj' in rv.data
+    assert b'No bookmarks' in rv.data
 
 
 @then("System will add book to db")
 def check_db_has_book(client):
     rv = client.get('/list')
     assert b'Introduction to Algorithms' in rv.data
-    assert b'Tietokanta on tyhj' not in rv.data
+    assert b'No bookmarks' not in rv.data

@@ -3,24 +3,28 @@
 {% block body %}
 
 {% if book is defined and book %}
-<h3>Kirja: {{ book.header }}</h3>
+<h3>Title: {{ book.header }}</h3>
 <p>
-{% if book.image %}
-<img src="{{ book.image }}" alt="Book image">
-{% else %}
-<img src="{{ url_for('static', filename='cover-placeholder.jpg') }}">
-{% endif %}
+  {% if book.image %}
+  <img src="{{ book.image }}" alt="Book image">
+  {% else %}
+  <img src="{{ url_for('static', filename='cover-placeholder.jpg') }}">
+  {% endif %}
 </p>
-<p>Luettu: {{ book.read_status }} {{ book.read_date }}</p>
-<b>Kirjoittanut: {{ book.writer }}</b>
+{% if book.read_status %}
+<p>Status: Read</p>
+{% else %}
+<p>Status: Not read</p>
+{% endif %}
+<b>Author: {{ book.writer }}</b>
 <p>{{ book.comment }}</p>
 ISBN: {{ book.ISBN }}
 {% else %}
-<p>Virheellinen kirjanmerkki</p>
+<p>Incorrect bookmark</p>
 {% endif %}
 
 <p>
-<a href="{{url_for('bookmarks_form')}}" class="btn btn-outline-success">Lisää uusi kirjanmerkki</a>
-<a href="{{url_for('bookmarks_list')}}" class="btn btn-outline-success">Näytä kaikki kirjanmerkit</a>
+  <a href="{{url_for('bookmarks_edit', bookmark_id=book.bookmark_id)}}" class="btn btn-outline-success">Edit book</a>
+  <a href="{{url_for('bookmarks_form')}}" class="btn btn-outline-success">Add new book</a>
 </p>
 {% endblock %}
