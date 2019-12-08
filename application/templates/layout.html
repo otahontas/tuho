@@ -6,6 +6,9 @@
   </head>
 
   <body>
+      <a href="{{url_for('bookmarks_list')}}" class="btn btn-outline-success">
+          <h1>TUHO Lukuvinkkikirjasto</h1>
+      </a>
       {% with messages = get_flashed_messages() %}
         {% if messages %}
         <ul>
@@ -15,9 +18,7 @@
         </ul>
         {% endif %}
       {% endwith %}
-      <a href="{{url_for('bookmarks_list')}}" class="btn btn-outline-success">
-        <h1>TUHO Lukuvinkkikirjasto</h1>
-      </a>
+
     {% block body %}
     <p>
       Content goes here
