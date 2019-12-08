@@ -31,8 +31,8 @@ def bookmarks_list():
         elif filter_seen == 2:
             op = '!='
         filter_spec.append({'field': 'read_status', 'op': op, 'value': True})
-    
-    bookmarks = apply_filters(bookmarks, filter_spec)       
+
+    bookmarks = apply_filters(bookmarks, filter_spec)
 
     bookmarks, pagination = apply_pagination(bookmarks, page_number=page,
                                              page_size=5)

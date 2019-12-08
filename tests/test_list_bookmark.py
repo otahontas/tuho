@@ -18,10 +18,12 @@ def test_no_books_shown_when_filtering_with_videos(client, book):
     assert response.status_code == 200
     assert b'No bookmarks' in response.data
 
+
 def test_no_books_shown_when_filtering_with_seen_status_true(client, book):
     response = client.get('/list?seen=1')
     assert response.status_code == 200
     assert b'No bookmarks' in response.data
+
 
 def test_book_shown_when_filtering_with_seen_status_true(client, book):
     response = client.get('/list?seen=2')
