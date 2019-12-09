@@ -2,13 +2,17 @@ from application.models import Video
 
 
 def test_video_insertion(client):
-    resp = client.post('/bookmarks/video', data={'header': 'test', 'URL': "",
-                       'comment': 'comment'}, follow_redirects=True)
+    resp = client.post('/bookmarks/video',
+                       data={'header': 'test',
+                             'URL': "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+                             'comment': 'comment'},
+                       follow_redirects=True)
+
     assert resp.status_code == 200
 
     video = Video.query.one()
     assert video.header == "test"
-    assert video.URL == ""
+    assert video.URL == "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
     assert video.comment == "comment"
 
 

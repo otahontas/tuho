@@ -1,6 +1,6 @@
 from flask_wtf import FlaskForm
 from wtforms import BooleanField, IntegerField, StringField
-from wtforms.validators import URL, InputRequired, Length, Optional
+from wtforms.validators import URL, InputRequired, Length
 
 
 class BookmarkForm(FlaskForm):
@@ -22,8 +22,8 @@ class BookUpdateForm(BookForm):
 
 
 class VideoForm(BookmarkForm):
-    URL = StringField("URL", [Optional(), URL(require_tld=False)])
-    timestamp = IntegerField("Timestamp", [Optional()])
+    URL = StringField("URL", [URL(require_tld=False)])
+    timestamp = IntegerField("Timestamp")
 
 
 class VideoUpdateForm(VideoForm):

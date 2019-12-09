@@ -13,10 +13,14 @@ def test_edit_form(client, video):
 
 def test_edit_video(client, video):
     resp = client.post(f"/bookmarks/video/edit/{video.id}",
-                       data={'header': 'Updated name'}, follow_redirects=True)
+                       data={'header': 'Updated name',
+                             'URL': "https://www.youtube.com/watch?v=dQw4w9WgXcQ"},
+                       follow_redirects=True)
     assert resp.status_code == 200
 
     video = Video.query.one()
+    print('')
+    print(video.URL)
     assert video.header == 'Updated name'
 
 
