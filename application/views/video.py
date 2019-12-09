@@ -51,15 +51,6 @@ def video_update(video_id, bookmark=None):
 
     form = VideoUpdateForm()
 
-    if request.method == "GET":
-        form.header.data = video.header
-        form.comment.data = video.comment
-        form.URL.data = video.URL
-        form.timestamp.data = video.timestamp
-        form.read_status.data = video.read_status
-        return render_template("bookmarks/video/edit.html", form=form,
-                               video_id=video_id)
-
     if form.validate_on_submit():
         video.header = form.header.data
         video.URL = form.URL.data
@@ -76,5 +67,10 @@ def video_update(video_id, bookmark=None):
 
         return redirect(url_for("get_bookmark", bookmark_id=video_id))
 
+    form.header.data = video.header
+    form.comment.data = video.comment
+    form.URL.data = video.URL
+    form.timestamp.data = video.timestamp
+    form.read_status.data = video.read_status
     return render_template("bookmarks/video/edit.html", form=form,
                            video_id=video_id)
