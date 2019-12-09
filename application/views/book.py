@@ -24,14 +24,13 @@ def book_create():
         if not prefilled:
             try:
                 book_details = resolve_book_details(form.ISBN.data)
-                book = Book(header=book_details.get("title", form.header.data),
-                            writer=book_details.get("author", form.writer.data),
-                            image=book_details.get("image", ""),
-                            comment=form.comment.data, ISBN=form.ISBN.data)
+                form.header.data = book_details.get("title")
+                form.writer.data = book_details.get("author")
+                form.image.data = book_details.get("image")
                 flash('Name and writer resolved successfully, ' +
                       'please check that details are correct')
                 return render_template("/bookmarks/book/new.html", form=form,
-                                       book=book, prefilled=True)
+                                       prefilled=True)
             except (RuntimeError):
                 flash('Book fetch failed, please give name and title for book yourself')
                 return render_template("/bookmarks/book/new.html", form=form,

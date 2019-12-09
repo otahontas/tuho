@@ -13,19 +13,11 @@
   	<table>
 		<tr>
 			<th>{{ form.header.label }}</th>
-            {% if book %}
-			<th>{{ form.header(value=book.header)}}</th>
-            {% else %}
 			<th>{{ form.header}}</th>
-            {% endif %}
 		</tr>
   		<tr>
 			<th>{{ form.writer.label }}</th>
-            {% if book %}
-			<th>{{ form.writer(value=book.writer) }}</th>
-            {% else %}
 			<th>{{ form.writer }}</th>
-            {% endif %}
   		</tr>
 		<tr>
 			<th>{{ form.ISBN.label }}</th>
@@ -33,11 +25,7 @@
 		  </tr>
 		  <tr>
 			<th>{{ form.image.label }}</th>
-			{% if book %}
-			<th>{{ form.image(value=book.image) }}</th>
-            {% else %}
 			<th>{{ form.image }}</th>
-            {% endif %}
   		</tr>
 		<tr>
 			<th>{{ form.comment.label }}</th>
