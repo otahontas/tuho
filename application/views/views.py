@@ -7,6 +7,7 @@ from sqlalchemy_filters import apply_filters, apply_pagination
 from application.app import app, db
 from application.forms import UpdateCommentForm, UpdateTimestampForm
 from application.models import Bookmark
+
 from ..utils import timestamp_parser
 
 
@@ -81,7 +82,7 @@ def get_bookmark(bookmark_id):
 
         new_time = timestamp_parser("3:20")
         return render_template("bookmarks/video/details.html", video=bookmark,
-                               embed=embed, 
+                               embed=embed,
                                comment_form=comment_form,
                                timestamp_form=timestamp_form,
                                new_time=new_time

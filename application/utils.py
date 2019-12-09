@@ -87,10 +87,10 @@ def timestamp_parser(time):
 
     if time:
         time = time.split(':')
-        seconds = int(time[len(time)-1])
-        
+        seconds = int(time[len(time) - 1])
+
         if len(time) > 1:
-            for i in range(len(time)-1):
+            for i in range(len(time) - 1):
                 seconds += 60 * int(time[i])
 
         return seconds
