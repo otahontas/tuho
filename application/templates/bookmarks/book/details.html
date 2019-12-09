@@ -12,16 +12,29 @@
   {% endif %}
 </p>
 {% if book.read_status %}
-<p>Status: Read</p>
+<p>Status: <span style="color: green">Read</span></p>
 {% else %}
-<p>Status: Not read</p>
+<p>Status: <span style="color: red">Not read</span></p>
 {% endif %}
 <b>Author: {{ book.writer }}</b>
-<p>{{ book.comment }}</p>
-ISBN: {{ book.ISBN }}
+<p>ISBN: {{ book.ISBN }}</p>
 {% else %}
 <p>Incorrect bookmark</p>
 {% endif %}
+
+{% for field, errors in comment_form.errors.items() %}
+<div style="color: red">
+  {{ comment_form[field].label }}: {{ ', '.join(errors) }}
+</div>
+{% endfor %}
+<form method="POST" action="{{ url_for('update_comment', bookmark_id=book.bookmark_id) }}">
+  <table>
+    <tr>
+      <th>{{ comment_form.comment }}</th>
+    </tr>
+  </table>
+  <input type="submit" value="Update comment"/>
+</form>
 
 <p>
   <a href="{{url_for('bookmarks_edit', bookmark_id=book.bookmark_id)}}" class="btn btn-outline-success">Edit book</a>

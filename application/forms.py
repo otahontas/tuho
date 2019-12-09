@@ -1,11 +1,11 @@
 from flask_wtf import FlaskForm
-from wtforms import BooleanField, IntegerField, StringField
-from wtforms.validators import URL, InputRequired, Length
+from wtforms import BooleanField, IntegerField, StringField, TextAreaField
+from wtforms.validators import URL, InputRequired, Length, Optional
 
 
 class BookmarkForm(FlaskForm):
     header = StringField("Name", [Length(min=1, max=50)])
-    comment = StringField("Comment", [Length(max=1024)])
+    comment = TextAreaField("Comment", [Length(max=1024)])
 
     class Meta:
         csrf = False
@@ -22,9 +22,23 @@ class BookUpdateForm(BookForm):
 
 
 class VideoForm(BookmarkForm):
-    URL = StringField("URL", [URL(require_tld=False)])
-    timestamp = IntegerField("Timestamp")
+    URL = StringField("URL", [InputRequired(), URL(require_tld=False)])
+    timestamp = IntegerField("Timestamp", [Optional()])
 
 
 class VideoUpdateForm(VideoForm):
     read_status = BooleanField("Read")
+
+
+class UpdateCommentForm(FlaskForm):
+    comment = TextAreaField("Comment", [Length(max=1024)])
+
+    class Meta:
+        csrf = False
+
+
+class UpdateTimestampForm(FlaskForm):
+    timestamp = IntegerField("Timestamp")
+
+    class Meta:
+        csrf = False

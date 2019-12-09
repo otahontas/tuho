@@ -77,7 +77,7 @@ def book_update(book_id, bookmark=None):
             db.session().commit()
         except IntegrityError:
             db.session.rollback()
-            return render_template("bookmarks/video/edit.html", form=form,
+            return render_template("bookmarks/book/edit.html", form=form,
                                    bookmark_id=book_id, ISBN_taken=True)
 
         return redirect(url_for("get_bookmark", bookmark_id=book_id))

@@ -1,9 +1,11 @@
 import re
 
 from flask import abort, redirect, render_template, request, url_for
+from sqlalchemy.exc import IntegrityError
 from sqlalchemy_filters import apply_filters, apply_pagination
 
 from application.app import app, db
+from application.forms import UpdateCommentForm, UpdateTimestampForm
 from application.models import Bookmark
 
 
@@ -57,8 +59,15 @@ def get_bookmark(bookmark_id):
     bookmark = db.session.query(Bookmark).get(bookmark_id)
 
     if bookmark.type == Bookmark.TYPE_BOOK:
-        return render_template("bookmarks/book/details.html", book=bookmark)
+        comment_form = UpdateCommentForm()
+        comment_form.comment.data = bookmark.comment
+        return render_template("bookmarks/book/details.html", book=bookmark,
+                               comment_form=comment_form)
     elif bookmark.type == Bookmark.TYPE_VIDEO:
+        comment_form = UpdateCommentForm()
+        comment_form.comment.data = bookmark.comment
+        timestamp_form = UpdateTimestampForm()
+        timestamp_form.timestamp.data = bookmark.timestamp
         yt = "https://www.youtube-nocookie.com/embed/"
         timestamp = request.args.get('timestamp')
         # substitute non-ID part with embed-URL
@@ -70,7 +79,8 @@ def get_bookmark(bookmark_id):
             embed += '?start=' + str(timestamp)
         print(embed)
         return render_template("bookmarks/video/details.html", video=bookmark,
-                               embed=embed)
+                               embed=embed, comment_form=comment_form,
+                               timestamp_form=timestamp_form)
 
     abort(404)
 
@@ -95,3 +105,33 @@ def bookmarks_edit(bookmark_id):
         return redirect(url_for("video_update", video_id=bookmark_id, bookmark=bookmark))
 
     abort(404)
+
+
+@app.route("/bookmarks/edit/comment/<bookmark_id>", methods=["POST"])
+def update_comment(bookmark_id):
+    bookmark = Bookmark.query.get_or_404(bookmark_id)
+    form = UpdateCommentForm()
+
+    if form.validate_on_submit():
+        bookmark.comment = form.comment.data
+        try:
+            db.session().commit()
+        except IntegrityError:
+            db.session.rollback()
+
+    return redirect(url_for("get_bookmark", bookmark_id=bookmark_id))
+
+
+@app.route("/bookmarks/edit/timestamp/<bookmark_id>", methods=["POST"])
+def update_timestamp(bookmark_id):
+    bookmark = Bookmark.query.get_or_404(bookmark_id)
+    form = UpdateTimestampForm()
+
+    if form.validate_on_submit():
+        bookmark.timestamp = form.timestamp.data
+        try:
+            db.session().commit()
+        except IntegrityError:
+            db.session.rollback()
+
+    return redirect(url_for("get_bookmark", bookmark_id=bookmark_id))

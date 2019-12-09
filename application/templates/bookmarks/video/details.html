@@ -9,12 +9,37 @@
 {% else %}
 <p>Status: not seen</p>
 {% endif %}
-<p>{{ video.comment }}</p>
 <p>URL: <a href="{{ video.URL }}">{{ video.URL }}</a></p>
 {% if video.timestamp %}
 <a href="{{url_for('get_bookmark', bookmark_id=video.id, timestamp=video.timestamp)}}">view from timestamp at {{ video.timestamp }} seconds</a><br>
 {% endif %}
+
+{% for field, errors in timestamp_form.errors.items() %}
+<div style="color: red">
+  {{ timestamp_form[field].label }}: {{ ', '.join(errors) }}
+</div>
+{% endfor %}
+<form method="POST" action="{{ url_for('update_timestamp', bookmark_id=video.bookmark_id) }}">
+    {{ timestamp_form.timestamp }}
+    <input type="submit" value="Update timestamp"/>
+</form>
+
 <iframe width="560"height="315"src="{{ embed }}"frameborder="0"></iframe><br>
+
+{% for field, errors in comment_form.errors.items() %}
+<div style="color: red">
+    {{ comment_form[field].label }}: {{ ', '.join(errors) }}
+</div>
+{% endfor %}
+<form method="POST" action="{{ url_for('update_comment', bookmark_id=video.bookmark_id) }}">
+    <table>
+        <tr>
+            <th>{{ comment_form.comment }}</th>
+        </tr>
+    </table>
+    <input type="submit" value="Update comment"/>
+</form>
+
 <a href="{{url_for('video_update', video_id=video.id)}}">Edit video</a>
 <a href="{{url_for('video_create')}}" class="btn btn-outline-success">Add new video</a>
 
