@@ -10,16 +10,13 @@ from application.models import Book, Bookmark
 from ..utils import is_valid_isbn, resolve_book_details
 
 
-@app.route("/bookmarks/new/book", methods=["GET"])
-def bookmarks_form():
-    form = BookForm()
-    return render_template("bookmarks/book/new.html", form=form)
-
-
-@app.route("/bookmarks/book", methods=["POST"])
+@app.route("/bookmarks/book", methods=["GET", "POST"])
 def book_create():
-    # TODO: If no ISBN given header and writer fields should be required
-    form = BookForm(request.form)
+    form = BookForm()
+
+    if request.method == "GET":
+        return render_template("bookmarks/book/new.html", form=form)
+
     prefilled = request.args.get('prefilled')
     form.ISBN.data = re.sub(r'[^\d]*', '', form.ISBN.data)
 

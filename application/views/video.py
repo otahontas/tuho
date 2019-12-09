@@ -6,15 +6,9 @@ from application.forms import VideoForm, VideoUpdateForm
 from application.models import Bookmark, Video
 
 
-@app.route("/bookmarks/new/video")
-def video_form():
-    form = VideoForm()
-    return render_template("bookmarks/video/new.html", form=form)
-
-
-@app.route("/bookmarks/video", methods=["POST"])
+@app.route("/bookmarks/video", methods=["GET", "POST"])
 def video_create():
-    form = VideoForm(request.form)
+    form = VideoForm()
 
     if form.validate_on_submit():
         video = Video(header=form.header.data,

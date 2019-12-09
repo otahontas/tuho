@@ -82,7 +82,7 @@ def test_isbn_changed_to_nonvalid_after_prefilling_is_not_added(client):
 
 
 def test_bookform_is_rendered_correctly(client):
-    rv = client.get('/bookmarks/new/book')
+    rv = client.get('/bookmarks/book')
     assert b'Name' in rv.data
     assert b'Writer' in rv.data
     assert b'ISBN' in rv.data

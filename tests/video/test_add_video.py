@@ -13,7 +13,7 @@ def test_video_insertion(client):
 
 
 def test_add_video_form(client):
-    resp = client.get("/bookmarks/new/video")
+    resp = client.get("/bookmarks/video")
     assert resp.status_code == 200
 
     data = str(resp.data)
