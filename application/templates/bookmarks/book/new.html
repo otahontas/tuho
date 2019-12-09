@@ -1,6 +1,13 @@
 {% extends "layout.html"  %}
 
 {% block body %}
+
+{% for field, errors in form.errors.items() %}
+<div style="color: red">
+    {{ form[field].label }}: {{ ', '.join(errors) }}
+</div>
+{% endfor %}
+
 <form method="POST" action="{{ url_for('book_create', prefilled=prefilled) }}">
 	<p>If a valid ISBN is given, book details will be resolved automatically. Fields name and writer are ignored if book alredy exists with given ISBN.</p>
   	<table>
