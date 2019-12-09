@@ -7,6 +7,7 @@ from sqlalchemy_filters import apply_filters, apply_pagination
 from application.app import app, db
 from application.forms import UpdateCommentForm, UpdateTimestampForm
 from application.models import Bookmark
+from ..utils import timestamp_parser
 
 
 @app.route("/")
@@ -68,19 +69,23 @@ def get_bookmark(bookmark_id):
         comment_form.comment.data = bookmark.comment
         timestamp_form = UpdateTimestampForm()
         timestamp_form.timestamp.data = bookmark.timestamp
+
         yt = "https://www.youtube-nocookie.com/embed/"
         timestamp = request.args.get('timestamp')
         # substitute non-ID part with embed-URL
         embed = re.sub(r'http(?:s?):\/\/(?:www\.)?youtu(?:be\.com\/watch\?v=|\.be\/)' +
                        r'(&(amp;)?[\w\?=]*)?', yt, bookmark.URL)
         timestamp = request.args.get('timestamp')
-        print("timestamp: ", timestamp)
         if timestamp:
             embed += '?start=' + str(timestamp)
-        print(embed)
+
+        new_time = timestamp_parser("3:20")
         return render_template("bookmarks/video/details.html", video=bookmark,
-                               embed=embed, comment_form=comment_form,
-                               timestamp_form=timestamp_form)
+                               embed=embed, 
+                               comment_form=comment_form,
+                               timestamp_form=timestamp_form,
+                               new_time=new_time
+                               )
 
     abort(404)
 
@@ -128,7 +133,7 @@ def update_timestamp(bookmark_id):
     form = UpdateTimestampForm()
 
     if form.validate_on_submit():
-        bookmark.timestamp = form.timestamp.data
+        bookmark.timestamp = timestamp_parser(form.timestamp.data)
         try:
             db.session().commit()
         except IntegrityError:
