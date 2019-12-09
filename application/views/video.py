@@ -54,7 +54,7 @@ def video_update(video_id, bookmark=None):
     if form.validate_on_submit():
         video.header = form.header.data
         video.URL = form.URL.data
-        video.timestamp = form.timestamp.data
+        video.timestamp = timestamp_parser(form.timestamp.data)
         video.comment = form.comment.data
         video.read_status = form.read_status.data
 
