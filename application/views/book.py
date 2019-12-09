@@ -47,16 +47,19 @@ def book_create():
         flash('ISBN given was not valid, please give a valid ISBN instead')
         return render_template("/bookmarks/book/new.html", form=form)
 
-    db.session().add(book)
-    try:
-        db.session().commit()
-    except IntegrityError:
-        db.session.rollback()
-        flash('Book with given ISBN was already in the database')
-        return render_template("/bookmarks/book/new.html", form=form)
+    if form.validate_on_submit():
+        db.session().add(book)
+        try:
+            db.session().commit()
+        except IntegrityError:
+            db.session.rollback()
+            flash('Book with given ISBN was already in the database')
+            return render_template("/bookmarks/book/new.html", form=form)
 
-    flash('Book succefully added')
-    return redirect(url_for("get_bookmark", bookmark_id=book.id))
+        flash('Book succefully added')
+        return redirect(url_for("get_bookmark", bookmark_id=book.id))
+    else:
+        return render_template("bookmarks/book/new.html", form=form)
 
 
 @app.route("/bookmarks/book/edit/<book_id>", methods=["GET", "POST"])
