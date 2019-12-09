@@ -80,3 +80,18 @@ def get_video_title(link):
         response_text = response.read()
         data = json.loads(response_text.decode())
         return data['title']
+
+
+def timestamp_parser(time):
+    """ Convert minutes and seconds to seconds """
+
+    if time:
+        time = time.split(':')
+        seconds = int(time[len(time)-1])
+        
+        if len(time) > 1:
+            for i in range(len(time)-1):
+                seconds += 60 * int(time[i])
+
+        return seconds
+    return time

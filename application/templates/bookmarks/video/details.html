@@ -10,6 +10,7 @@
 <p>Status: not seen</p>
 {% endif %}
 <p>URL: <a href="{{ video.URL }}">{{ video.URL }}</a></p>
+
 {% if video.timestamp %}
 <a href="{{url_for('get_bookmark', bookmark_id=video.id, timestamp=video.timestamp)}}">view from timestamp at {{ video.timestamp }} seconds</a><br>
 {% endif %}
@@ -19,6 +20,9 @@
   {{ timestamp_form[field].label }}: {{ ', '.join(errors) }}
 </div>
 {% endfor %}
+
+<br/>
+<p>Enter new timestamp as hours:minutes:seconds</p>
 <form method="POST" action="{{ url_for('update_timestamp', bookmark_id=video.bookmark_id) }}">
     {{ timestamp_form.timestamp }}
     <input type="submit" value="Update timestamp"/>
@@ -39,6 +43,7 @@
     </table>
     <input type="submit" value="Update comment"/>
 </form>
+<br>
 
 <a href="{{url_for('video_update', video_id=video.id)}}">Edit video</a>
 <a href="{{url_for('video_create')}}" class="btn btn-outline-success">Add new video</a>

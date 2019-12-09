@@ -7,7 +7,7 @@ from application.app import app, db
 from application.forms import VideoForm, VideoUpdateForm
 from application.models import Bookmark, Video
 
-from ..utils import get_video_title
+from ..utils import get_video_title, timestamp_parser
 
 
 @app.route("/bookmarks/video", methods=["GET", "POST"])
@@ -31,7 +31,7 @@ def video_create():
         video = Video(header=form.header.data,
                       comment=form.comment.data,
                       URL=form.URL.data,
-                      timestamp=form.timestamp.data)
+                      timestamp=timestamp_parser(form.timestamp.data))
 
         db.session().add(video)
         try:

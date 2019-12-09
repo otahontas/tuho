@@ -23,7 +23,7 @@ class BookUpdateForm(BookForm):
 
 class VideoForm(BookmarkForm):
     URL = StringField("URL", [InputRequired(), URL(require_tld=False)])
-    timestamp = IntegerField("Timestamp", [Optional()])
+    timestamp = StringField("Timestamp", [Optional()])
 
 
 class VideoUpdateForm(VideoForm):
@@ -38,7 +38,7 @@ class UpdateCommentForm(FlaskForm):
 
 
 class UpdateTimestampForm(FlaskForm):
-    timestamp = IntegerField("Timestamp")
+    timestamp = StringField("Timestamp")
 
     class Meta:
         csrf = False
