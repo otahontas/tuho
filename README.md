@@ -14,6 +14,12 @@ Online application for storing interesting videos, books, podcasts and websites 
    * Run the application `python3 run.py`
    * Use a web browser to navigate to `localhost:5000`
 
+Or use preconfigured dockerfile and run following commands in repository root:
+   * `docker build -t tuho .`
+   * `docker run -d -p 5000:5000 tuho`
+   * Use a web browser to navigate to `localhost:5000`
+
+
 ## Demo
 - App [runs on heroku](https://tuho-lukuvinkkikirjasto.herokuapp.com/) (you may have to wait for a short while before app starts)
 
