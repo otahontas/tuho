@@ -1,14 +1,31 @@
-from flask import redirect, render_template, request, url_for
+from urllib.error import HTTPError
+
+from flask import flash, redirect, render_template, request, url_for
 from sqlalchemy.exc import IntegrityError
 
 from application.app import app, db
 from application.forms import VideoForm, VideoUpdateForm
 from application.models import Bookmark, Video
 
+from ..utils import get_video_title
+
 
 @app.route("/bookmarks/video", methods=["GET", "POST"])
 def video_create():
     form = VideoForm()
+
+    if request.method == "GET":
+        return render_template("bookmarks/video/new.html", form=form)
+
+    if not form.header.data:
+        try:
+            title = get_video_title(form.URL.data)
+            form.header.data = title
+            flash('Title updated')
+            return render_template("bookmarks/video/new.html", form=form)
+        except (RuntimeError, HTTPError):
+            flash('Check the link')
+            return render_template("bookmarks/video/new.html", form=form)
 
     if form.validate_on_submit():
         video = Video(header=form.header.data,
@@ -22,8 +39,7 @@ def video_create():
         except IntegrityError:
             db.session.rollback()
             return render_template("/bookmarks/video/new.html")
-
-        return redirect(url_for("bookmarks_list"))
+        return redirect(url_for("get_bookmark", bookmark_id=video.id))
 
     return render_template("bookmarks/video/new.html", form=form)
 
