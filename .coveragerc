@@ -1,2 +1,6 @@
 [run]
-omit = tests/*, venv/*, run.py, **/__init__.py, app.py
+omit = tests/*, venv/*, run.py, **/__init__.py, **/app.py
+
+[report]
+exclude_lines =
+    except IntegrityError
