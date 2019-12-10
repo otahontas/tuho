@@ -1,12 +1,10 @@
-import json
 import re
-import urllib
-import urllib.request
 
 import requests
 
 
-API_URL = 'https://www.googleapis.com/books/v1/volumes'
+BOOK_API_URL = 'https://www.googleapis.com/books/v1/volumes'
+VIDEO_API_URL = 'https://www.youtube.com/oembed'
 
 
 def resolve_book_details(ISBN):
@@ -57,7 +55,7 @@ def is_valid_isbn(ISBN):
 def _get_book_details(ISBN):
     """ Get book details by ISBN from API """
 
-    response = requests.get(f'{API_URL}?q=isbn:{ISBN}')
+    response = requests.get(f'{BOOK_API_URL}?q=isbn:{ISBN}')
 
     if response.status_code != 200:
         raise RuntimeError("Api request to resolve book details failed")
@@ -70,16 +68,13 @@ def _get_book_details(ISBN):
 
 def get_video_title(link):
     """ Get video title for a given YouTube-link """
+    response = requests.get(f'{VIDEO_API_URL}?format=json&url={link}')
 
-    params = {"format": "json", "url": link}
-    query_url = "https://www.youtube.com/oembed"
-    query_string = urllib.parse.urlencode(params)
-    query_url += "?" + query_string
+    if response.status_code != 200:
+        raise RuntimeError("Api request to resolve video details failed")
 
-    with urllib.request.urlopen(query_url) as response:
-        response_text = response.read()
-        data = json.loads(response_text.decode())
-        return data['title']
+    data = response.json()
+    return data.get('title', None)
 
 
 def timestamp_parser(time):

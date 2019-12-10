@@ -1,3 +1,6 @@
+from application.models import Book
+
+
 def test_edit_book(client, book):
     """ Assert that book instance is edited """
     response = client.post(f"/bookmarks/book/edit/{book.id}",
@@ -29,3 +32,12 @@ def test_edit_form(client, book):
     data = str(resp.data)
 
     assert '<input type="submit" value="Update book"/>' in data
+
+
+def test_edit_book_comment(client, book):
+    resp = client.post(f"/bookmarks/edit/comment/{book.id}",
+                       data={'comment': 'Cool comment'}, follow_redirects=True)
+    assert resp.status_code == 200
+
+    book = Book.query.one()
+    assert book.comment == "Cool comment"

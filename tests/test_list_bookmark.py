@@ -31,3 +31,10 @@ def test_book_shown_when_filtering_with_seen_status_true(client, book):
 
     test_pattern = f"{book.header}"
     assert test_pattern.encode() in response.data
+
+
+def test_index(client, book, video):
+    resp = client.get("/", follow_redirects=True)
+    assert resp.status_code == 200
+
+    assert b'No bookmarks' not in resp.data

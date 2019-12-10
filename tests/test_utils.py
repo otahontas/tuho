@@ -40,6 +40,7 @@ def test_ISBN_validation_works():
 def test_ISBN_validation_with_invalid_value():
     assert not is_valid_isbn("abcdefghij")
     assert not is_valid_isbn("123456")
+    assert not is_valid_isbn(-1)
 
 
 def test_valueError_is_raided_with_wrong_isbn():

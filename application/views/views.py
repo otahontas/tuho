@@ -8,8 +8,6 @@ from application.app import app, db
 from application.forms import UpdateCommentForm, UpdateTimestampForm
 from application.models import Bookmark
 
-from ..utils import timestamp_parser
-
 
 @app.route("/")
 def index():
@@ -80,13 +78,9 @@ def get_bookmark(bookmark_id):
         if timestamp:
             embed += '?start=' + str(timestamp)
 
-        new_time = timestamp_parser("3:20")
         return render_template("bookmarks/video/details.html", video=bookmark,
-                               embed=embed,
-                               comment_form=comment_form,
-                               timestamp_form=timestamp_form,
-                               new_time=new_time
-                               )
+                               embed=embed, comment_form=comment_form,
+                               timestamp_form=timestamp_form)
 
     abort(404)
 
@@ -120,21 +114,6 @@ def update_comment(bookmark_id):
 
     if form.validate_on_submit():
         bookmark.comment = form.comment.data
-        try:
-            db.session().commit()
-        except IntegrityError:
-            db.session.rollback()
-
-    return redirect(url_for("get_bookmark", bookmark_id=bookmark_id))
-
-
-@app.route("/bookmarks/edit/timestamp/<bookmark_id>", methods=["POST"])
-def update_timestamp(bookmark_id):
-    bookmark = Bookmark.query.get_or_404(bookmark_id)
-    form = UpdateTimestampForm()
-
-    if form.validate_on_submit():
-        bookmark.timestamp = timestamp_parser(form.timestamp.data)
         try:
             db.session().commit()
         except IntegrityError:
