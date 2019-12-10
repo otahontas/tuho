@@ -23,3 +23,19 @@ def test_add_video_form(client):
     data = str(resp.data)
 
     assert '<input type="submit" value="Add a new video"/>' in data
+
+
+def test_add_video_by_url(client, mock_succesful_api_fetch):
+    resp = client.post('/bookmarks/video', data={
+        'URL': "https://www.youtube.com/watch?v=dQw4w9WgXcQ"}, follow_redirects=True)
+
+    data = str(resp.data)
+    assert 'A super cool mocked video' in data
+
+
+def test_add_video_by_invalid_url(client, mock_failed_api_fetch):
+    resp = client.post('/bookmarks/video', data={
+        'URL': "This is not an youtube url???"}, follow_redirects=True)
+
+    data = str(resp.data)
+    assert 'Check the link' in data
