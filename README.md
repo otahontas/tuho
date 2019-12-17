@@ -4,6 +4,8 @@ Online application for storing interesting videos, books, podcasts and websites 
 
 [![Build Status](https://travis-ci.com/otahontas/tuho.svg?branch=master)](https://travis-ci.com/otahontas/tuho) [![codecov](https://codecov.io/gh/otahontas/tuho/branch/master/graph/badge.svg)](https://codecov.io/gh/otahontas/tuho)
 
+## Loppuraportti
+[Loppuraportti (in finnish)](https://docs.google.com/document/d/1RYE3QGry9ZS6JIPAGBSSp9qfKlu5X-sZZeQY_p-GdFA/edit?usp=sharing)
 
 ## Local usage
 
